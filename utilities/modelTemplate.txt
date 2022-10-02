@@ -1,0 +1,30 @@
+<?php
+namespace App\Models\CMS;
+use Core\Model;
+
+class [ModelName] extends Model
+{
+    public $timestamps = false;
+    protected $table = "[TableName]";
+    protected $primaryKey = "id";
+
+    protected $fillable = [ [Fillable] ];
+
+
+    public static function beginTransaction()
+    {
+        self::getConnectionResolver()->connection()->beginTransaction();
+    }
+
+    public static function commit()
+    {
+        self::getConnectionResolver()->connection()->commit();
+    }
+
+    public static function rollBack()
+    {
+        self::getConnectionResolver()->connection()->rollBack();
+    }
+
+}
+?>

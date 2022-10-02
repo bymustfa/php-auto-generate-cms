@@ -1,0 +1,184 @@
+<?php
+
+
+namespace App\Controllers\CMS;
+
+use App\Models\CMS\[ModelName];
+use Symfony\Component\HttpFoundation\Request;
+use Core\Controller;
+
+
+class [ControllerName] extends Controller
+{
+
+    public function create(Request $request)
+    {
+        $headers = $request->headers->all();
+        try {
+            [ModelName]::beginTransaction();
+
+            $postData = $request->getContent();
+            $postData = json_decode($postData, true);
+
+            foreach ($postData as $key => $value) {
+                $key = dataClear($key);
+                $value = dataClear($value);
+                $postData[$key] = $value;
+            }
+            $add = [ModelName]::create($postData);
+            if ($add) {
+                [ModelName]::commit();
+                controllerResponse($headers, "[ModelName] Başarıyla Eklendi", $add);
+            } else {
+                [ModelName]::rollBack();
+                throw new \Exception("[ModelName] Ekleme Başarısız");
+            }
+        } catch (\Exception $e) {
+            [ModelName]::rollBack();
+            $message = $e->getMessage();
+            controllerResponse($headers, $message, null, false, 500);
+        }
+    }
+
+    public function filter(Request $request)
+    {
+         $headers = $request->headers->all();
+        try {
+             [ModelName]::beginTransaction();
+
+            $filters = $request->getContent();
+
+            if ($filters) {
+                $filters = json_decode($filters, true);
+                $datas = [ModelName]::query();
+
+
+                // where('city_name', 'like', '%lis%')
+                foreach ($filters as $filter) {
+                    $datas = $datas->where($filter['column'], $filter['operator'], $filter['value']);
+                }
+
+                $datas = $datas->get();
+
+                if ($datas) {
+                    [ModelName]::commit();
+                    controllerResponse($headers, "[ModelName] Başarıyla Getirildi", ['count' => count($datas), 'data' => $datas]);
+                } else {
+                   [ModelName]::rollBack();
+                    throw new \Exception("[ModelName] Getirme Başarısız");
+                }
+            } else {
+               [ModelName]::rollBack();
+                throw new \Exception("[ModelName] Getirme Başarısız");
+            }
+        } catch (\Exception $e) {
+           [ModelName]::rollBack();
+            $message = $e->getMessage();
+            controllerResponse($headers, $message, null, false, 500);
+        }
+    }
+
+    public function update(Request $request, $id)
+    {
+         $headers = $request->headers->all();
+        try {
+             [ModelName]::beginTransaction();
+
+            $id = intval(dataClear($id));
+            $putData = $request->getContent();
+            $putData = json_decode($putData, true);
+
+            foreach ($putData as $key => $value) {
+                $key = dataClear($key);
+                $value = dataClear($value);
+                $putData[$key] = $value;
+            }
+
+            $find = [ModelName]::find($id);
+            if ($find) {
+
+                $update = $find->update($putData);
+                if ($update) {
+                    [ModelName]::commit();
+                    controllerResponse($headers, "[ModelName] Başarıyla Güncellendi", $update);
+                } else {
+                   [ModelName]::rollBack();
+                    throw new \Exception("[ModelName] Güncelleme Başarısız");
+                }
+            } else {
+               [ModelName]::rollBack();
+                throw new \Exception("[ModelName] Güncelleme Başarısız");
+            }
+        } catch (\Exception $e) {
+           [ModelName]::rollBack();
+            $message = $e->getMessage();
+            controllerResponse($headers, $message, null, false, 500);
+        }
+    }
+
+    public function delete(Request $request, $id)
+    {
+         $headers = $request->headers->all();
+        try {
+             [ModelName]::beginTransaction();
+
+            $id = intval(dataClear($id));
+            $find = [ModelName]::find($id);
+            if ($find) {
+                $delete = $find->delete();
+                if ($delete) {
+                 [ModelName]::commit();
+                    controllerResponse($headers, "[ModelName] Başarıyla Silindi", $delete);
+                } else {
+                   [ModelName]::rollBack();
+                    throw new \Exception("[ModelName] Silme Başarısız");
+                }
+            } else {
+               [ModelName]::rollBack();
+                throw new \Exception("[ModelName] Silme Başarısız");
+            }
+        } catch (\Exception $e) {
+           [ModelName]::rollBack();
+            $message = $e->getMessage();
+            controllerResponse($headers, $message, null, false, 500);
+        }
+    }
+
+    public function getByID(Request $request, $id)
+    {
+         $headers = $request->headers->all();
+        try {
+            $id = intval(dataClear($id));
+            $find = [ModelName]::find($id);
+            if ($find) {
+                controllerResponse($headers, "[ModelName] Başarıyla Getirildi", $find);
+            } else {
+                throw new \Exception("[ModelName] Getirme Başarısız");
+            }
+        } catch (\Exception $e) {
+            $message = $e->getMessage();
+            controllerResponse($headers, $message, null, false, 500);
+        }
+    }
+
+    public function getAll(Request $request)
+    {
+         $headers = $request->headers->all();
+        try {
+            $find = [ModelName]::all();
+            if ($find) {
+                controllerResponse($headers, "[ModelName] Başarıyla Getirildi", ['count' => count($find), 'data' => $find]);
+            } else {
+                throw new \Exception("[ModelName] Getirme Başarısız");
+            }
+        } catch (\Exception $e) {
+            $message = $e->getMessage();
+            controllerResponse($headers, $message, null, false, 500);
+        }
+    }
+
+
+}
+
+?>
+

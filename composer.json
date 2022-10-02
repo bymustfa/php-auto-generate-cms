@@ -1,0 +1,39 @@
+{
+  "name": "mustafa/kartcim_admin",
+  "autoload": {
+    "psr-4": {
+      "App\\": "./App",
+      "Core\\": "./Core"
+    },
+    "files": [
+      "./Core/helpers.php"
+    ]
+  },
+  "authors": [
+    {
+      "name": "Mustafa ÖZTÜRK",
+      "email": "bay.mustafa.37@hotmail.com"
+    }
+  ],
+  "config": {
+    "platform-check": false
+  },
+  "require": {
+    "izniburak/router": "^2.5",
+    "jenssegers/blade": "^1.4",
+    "arrilot/dotenv-php": "^2.0",
+    "aura/session": "^2.1",
+    "illuminate/database": "v8.45.1",
+    "phpmailer/phpmailer": "^6.6",
+    "illuminate/pagination": "v8.45.0",
+    "verot/class.upload.php": "^2.1",
+    "cocur/slugify": "^4.0",
+    "jenssegers/date": "^4.0",
+    "mrclay/minify": "^3.0.10",
+    "blood72/blade-minify": "^1.4",
+    "filp/whoops": "^2.7.3",
+    "firebase/php-jwt": "^6.3",
+    "phplucidframe/console-table": "^1.2",
+    "mustache/mustache": "^2.14"
+  }
+}

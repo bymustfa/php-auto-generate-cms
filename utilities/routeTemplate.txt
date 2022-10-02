@@ -1,0 +1,9 @@
+<?php
+$app->router->post("/[RouteName]", "[ControllerName]@create");
+$app->router->post("/[RouteName]/filter", "[ControllerName]@filter");
+$app->router->get("/[RouteName]/:id", "[ControllerName]@getByID");
+$app->router->get("/[RouteName]", "[ControllerName]@getAll");
+$app->router->put("/[RouteName]/:id", "[ControllerName]@update");
+$app->router->delete("/[RouteName]/:id", "[ControllerName]@delete");
+
+?>
