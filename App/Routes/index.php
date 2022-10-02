@@ -5,9 +5,36 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 
-$app->router->get('/', function () {
-    $generator = new \Core\Generator();
+$app->router->get('/', 'FrontController@Index');
 
+if (file_exists(__DIR__ . '/content/index.route.php')) {
+    require __DIR__ . '/content/index.route.php';
+}
+
+if (file_exists(__DIR__ . '/setup/index.route.php')) {
+    require __DIR__ . '/setup/index.route.php';
+}
+
+
+if (file_exists(__DIR__ . '/CMS/index.php')) {
+    require __DIR__ . '/CMS/index.php';
+}
+
+$app->router->notFound(function (Request $request, Response $response) {
+    response([
+        'status' => false,
+        'message' => 'Page not found',
+        'data' => null
+    ], 404);
+});
+
+
+$app->router->error(function (Request $request, Response $response, Exception $exception) {
+    throw $exception;
+});
+
+
+//    $generator = new \Core\Generator();
 
 //    $rename = $generator->renameTable('lokantalar', 'restaurants');
 //
@@ -57,38 +84,7 @@ $app->router->get('/', function () {
 //    print_r($route);
 //    echo "</pre>";
 
-    //  $generator->routeIndex();
-
-//    echo "Hello Index";
-
-
-});
-
-if (file_exists(__DIR__ . '/content/index.route.php')) {
-    require __DIR__ . '/content/index.route.php';
-}
-
-if (file_exists(__DIR__ . '/setup/index.route.php')) {
-    require __DIR__ . '/setup/index.route.php';
-}
-
-
-if (file_exists(__DIR__ . '/CMS/index.php')) {
-    require __DIR__ . '/CMS/index.php';
-}
-
-$app->router->notFound(function (Request $request, Response $response) {
-    response([
-        'status' => false,
-        'message' => 'Page not found',
-        'data' => null
-    ], 404);
-});
-
-
-$app->router->error(function (Request $request, Response $response, Exception $exception) {
-    throw $exception;
-});
+//  $generator->routeIndex();
 
 
 ?>

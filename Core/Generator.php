@@ -50,7 +50,9 @@ if (file_exists(__DIR__ . '/$file')) {
                 }
             }
             $indexTemplate = "<?php
+$app->router->group('/api', function ($router) {
 $template
+});
 ?>
 
 ";
