@@ -12,8 +12,12 @@
 
 
             <ul class="text-gray-800 child-menu ">
-                <li class="pb-2 transition-opacity duration-150 hover:opacity-75">
+                <li class="pb-2 transition-opacity duration-150 hover:opacity-75 dark:text-white">
                     <a href="{{base_url()}}">Dashboard</a>
+                </li>
+
+                <li class="pb-2 transition-opacity duration-150 hover:opacity-75 dark:text-white">
+                    <a  href="{{base_url('setup')}}">Setup</a>
                 </li>
 
             </ul>

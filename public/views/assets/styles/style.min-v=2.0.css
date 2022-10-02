@@ -1,8 +1,329 @@
-.list-grid-btn.active{background-color:var(--color-brands)}.list-grid-btn.active img{filter:brightness(0) saturate(100%) invert(100%) sepia(100%) saturate(0) hue-rotate(73deg) brightness(103%) contrast(103%)}.list-grid-btn.active span{color:var(--neutral-bg)}.dark .list-grid-btn.active img{filter:brightness(0) saturate(100%) invert(8%) sepia(8%) saturate(1865%) hue-rotate(189deg) brightness(89%) contrast(87%)}.dark .list-grid-btn.active span{color:var(--dark-neutral-bg)}input[type=range]{-webkit-appearance:none;-moz-appearance:none;appearance:none;border:0;border-radius:1px;box-sizing:border-box;margin:0;outline:none;overflow:hidden;padding:0 2px;pointer-events:none;width:320px}input[type=range],input[type=range]#lower{background:linear-gradient(#e4e7ec,#e4e7ec) no-repeat 50%;background-size:100% 6px}input[type=range]#lower,input[type=range]#upper{border-radius:6px!important}input[type=range]#upper{background:linear-gradient(to right,#e4e7ec 8%,var(--color-brands) 8% 98%,#e4e7ec 98%) no-repeat 50%;background-size:100% 6px;overflow:hidden;z-index:1}input[type=range]:active,input[type=range]:focus{outline:none}input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;background-color:#fff;border-radius:50%;box-shadow:0 1px 3px rgba(0,0,0,.3);cursor:pointer;height:24px;margin:5px 0;pointer-events:all;position:relative;width:24px;z-index:9999}.multi-range{height:34px;position:relative}.multi-range input[type=range]{position:absolute}.multi-range input[type=range]:first-child::-webkit-slider-thumb:before{background-color:var(--color-brands)}.multi-range input[type=range]:nth-child(2){background:none}.multi-range input[type=range]:nth-child(2)::-webkit-slider-thumb:before{background-color:var(--color-brands)}.checkbox-primary,.checkbox:hover,.radio-primary,.radio:hover{border-color:var(--gray-300)}.checkbox:checked:hover,.radio:checked:hover{border-color:transparent}.select{background:url("http://wp.alithemes.com/assets/images/icons/icon-arrow-down.svg") transparent no-repeat calc(100% - 15px)!important}.radio-input:checked~.radio-label{color:red}html.dark .moon-icon img:first-child,html.dark .sun-icon img:last-child{display:none}html.dark .moon-icon img:last-child,html.dark .sun-icon img:first-child{display:block}html .moon-icon img:last-child,html .sun-icon img:first-child{display:none}html .moon-icon img:first-child,html .sun-icon img:last-child{display:block}input:checked~.dot{transform:translateX(100%)}input:checked~.dotS{transform:translateX(118%)}.sr-only{clip:rect(0,0,0,0);border-width:0;height:1px;margin:-1px;overflow:hidden;padding:0;position:absolute;white-space:nowrap;width:1px}.reverse{transform:rotate(180deg) translateX(-50%)}.filter-gray{filter:invert(52%) sepia(17%) saturate(281%) hue-rotate(201deg) brightness(94%) contrast(87%)}.filter-green{filter:invert(83%) sepia(96%) saturate(337%) hue-rotate(84deg) brightness(88%) contrast(84%)}.tabs-boxed .tab-active{background-color:var(--color-brands);border-radius:100px!important}.dropdown-shadow{box-shadow:0 40px 120px 0 rgba(0,0,0,.122)}.search-input-shadow{box-shadow:0 20px 60px -6px rgba(0,0,0,.04)}.img-filter-shadow{filter:drop-shadow(0 0 7.19551px rgba(0,0,0,.05))}.sidemenu-item.active{background-color:var(--color-brands);transition:all .3s}.sidemenu-item.active span{color:#fff}.sidemenu-item.active img{filter:brightness(0) invert(1)}.sidemenu-item.active .child-menu{color:#fff}.logo-minimize,.seller-minimize{display:none}.minimize{grid-template-columns:117px 1fr}.minimize aside{padding:34px 14px}.minimize .sidemenu-item{display:grid;height:62px;margin:0 auto;place-items:center;width:62px}.minimize .logo-minimize,.minimize .seller-minimize{display:block}.minimize .caret-icon,.minimize .category-list,.minimize .child-menu,.minimize .logo-maximize,.minimize .seller-maximize,.minimize .sidemenu-item .sidemenu-title,.minimize .upgrade-card{display:none}.minimize .sidemenu-item.active .child-menu{background:var(--gray-100);border:1px solid var(--neutral-border);border-radius:8px;color:var(--gray-500);display:block;left:122%;min-width:150px;padding:20px;position:absolute;top:0}.minimize .sidebar-control{gap:13px;max-width:90px;padding:15px 11px}.minimize #toggle-theme-btn{display:none;opacity:0;visibility:hidden}.dark .minimize .sun-icon{display:none}.dark .minimize .sidemenu-item.active .child-menu{background:var(--gray-900);border-color:var(--gray-700)}.authentication-sign-in-page aside,html:not(.dark) .minimize .moon-icon{display:none}.authentication-sign-in-page #layout{display:flex;flex-direction:column}.authentication-sign-in-page .logo{display:block;order:-10000}.authentication-sign-in-page .user-noti{opacity:0;visibility:hidden}.add-new-job-page aside,.crm-customer-details-page aside,.crm-customers-page aside,.crm-dashboard-page aside,.crm-events-page aside,.jobs-listing-1-page aside,.jobs-listing-2-page aside{display:none}.add-new-job-page #layout,.crm-customer-details-page #layout,.crm-customers-page #layout,.crm-dashboard-page #layout,.crm-events-page #layout,.jobs-listing-1-page #layout,.jobs-listing-2-page #layout{display:flex;flex-direction:column}.add-new-job-page .logo,.crm-customer-details-page .logo,.crm-customers-page .logo,.crm-dashboard-page .logo,.crm-events-page .logo,.jobs-listing-1-page .logo,.jobs-listing-2-page .logo{display:block;order:-10000}
-.password-toggle{
+.list-grid-btn.active {
+    background-color: var(--color-brands)
+}
+
+.list-grid-btn.active img {
+    filter: brightness(0) saturate(100%) invert(100%) sepia(100%) saturate(0) hue-rotate(73deg) brightness(103%) contrast(103%)
+}
+
+.list-grid-btn.active span {
+    color: var(--neutral-bg)
+}
+
+.dark .list-grid-btn.active img {
+    filter: brightness(0) saturate(100%) invert(8%) sepia(8%) saturate(1865%) hue-rotate(189deg) brightness(89%) contrast(87%)
+}
+
+.dark .list-grid-btn.active span {
+    color: var(--dark-neutral-bg)
+}
+
+input[type=range] {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    border: 0;
+    border-radius: 1px;
+    box-sizing: border-box;
+    margin: 0;
+    outline: none;
+    overflow: hidden;
+    padding: 0 2px;
+    pointer-events: none;
+    width: 320px
+}
+
+input[type=range], input[type=range]#lower {
+    background: linear-gradient(#e4e7ec, #e4e7ec) no-repeat 50%;
+    background-size: 100% 6px
+}
+
+input[type=range]#lower, input[type=range]#upper {
+    border-radius: 6px !important
+}
+
+input[type=range]#upper {
+    background: linear-gradient(to right, #e4e7ec 8%, var(--color-brands) 8% 98%, #e4e7ec 98%) no-repeat 50%;
+    background-size: 100% 6px;
+    overflow: hidden;
+    z-index: 1
+}
+
+input[type=range]:active, input[type=range]:focus {
+    outline: none
+}
+
+input[type=range]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    background-color: #fff;
+    border-radius: 50%;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, .3);
+    cursor: pointer;
+    height: 24px;
+    margin: 5px 0;
+    pointer-events: all;
+    position: relative;
+    width: 24px;
+    z-index: 9999
+}
+
+.multi-range {
+    height: 34px;
+    position: relative
+}
+
+.multi-range input[type=range] {
+    position: absolute
+}
+
+.multi-range input[type=range]:first-child::-webkit-slider-thumb:before {
+    background-color: var(--color-brands)
+}
+
+.multi-range input[type=range]:nth-child(2) {
+    background: none
+}
+
+.multi-range input[type=range]:nth-child(2)::-webkit-slider-thumb:before {
+    background-color: var(--color-brands)
+}
+
+.checkbox-primary, .checkbox:hover, .radio-primary, .radio:hover {
+    border-color: var(--gray-300)
+}
+
+.checkbox:checked:hover, .radio:checked:hover {
+    border-color: transparent
+}
+
+.select {
+    background: url("http://wp.alithemes.com/assets/images/icons/icon-arrow-down.svg") transparent no-repeat calc(100% - 15px) !important
+}
+
+.radio-input:checked ~ .radio-label {
+    color: red
+}
+
+html.dark .moon-icon img:first-child, html.dark .sun-icon img:last-child {
+    display: none
+}
+
+html.dark .moon-icon img:last-child, html.dark .sun-icon img:first-child {
+    display: block
+}
+
+html .moon-icon img:last-child, html .sun-icon img:first-child {
+    display: none
+}
+
+html .moon-icon img:first-child, html .sun-icon img:last-child {
+    display: block
+}
+
+input:checked ~ .dot {
+    transform: translateX(100%)
+}
+
+input:checked ~ .dotS {
+    transform: translateX(118%)
+}
+
+.sr-only {
+    clip: rect(0, 0, 0, 0);
+    border-width: 0;
+    height: 1px;
+    margin: -1px;
+    overflow: hidden;
+    padding: 0;
+    position: absolute;
+    white-space: nowrap;
+    width: 1px
+}
+
+.reverse {
+    transform: rotate(180deg) translateX(-50%)
+}
+
+.filter-gray {
+    filter: invert(52%) sepia(17%) saturate(281%) hue-rotate(201deg) brightness(94%) contrast(87%)
+}
+
+.filter-green {
+    filter: invert(83%) sepia(96%) saturate(337%) hue-rotate(84deg) brightness(88%) contrast(84%)
+}
+
+.tabs-boxed .tab-active {
+    background-color: var(--color-brands);
+    border-radius: 100px !important
+}
+
+.dropdown-shadow {
+    box-shadow: 0 40px 120px 0 rgba(0, 0, 0, .122)
+}
+
+.search-input-shadow {
+    box-shadow: 0 20px 60px -6px rgba(0, 0, 0, .04)
+}
+
+.img-filter-shadow {
+    filter: drop-shadow(0 0 7.19551px rgba(0, 0, 0, .05))
+}
+
+.sidemenu-item.active {
+    background-color: var(--color-brands);
+    transition: all .3s
+}
+
+.sidemenu-item.active span {
+    color: #fff
+}
+
+.sidemenu-item.active img {
+    filter: brightness(0) invert(1)
+}
+
+.sidemenu-item.active .child-menu {
+    color: #fff
+}
+
+.logo-minimize, .seller-minimize {
+    display: none
+}
+
+.minimize {
+    grid-template-columns:117px 1fr
+}
+
+.minimize aside {
+    padding: 34px 14px
+}
+
+.minimize .sidemenu-item {
+    display: grid;
+    height: 62px;
+    margin: 0 auto;
+    place-items: center;
+    width: 62px
+}
+
+.minimize .logo-minimize, .minimize .seller-minimize {
+    display: block
+}
+
+.minimize .caret-icon, .minimize .category-list, .minimize .child-menu, .minimize .logo-maximize, .minimize .seller-maximize, .minimize .sidemenu-item .sidemenu-title, .minimize .upgrade-card {
+    display: none
+}
+
+.minimize .sidemenu-item.active .child-menu {
+    background: var(--gray-100);
+    border: 1px solid var(--neutral-border);
+    border-radius: 8px;
+    color: var(--gray-500);
+    display: block;
+    left: 122%;
+    min-width: 150px;
+    padding: 20px;
+    position: absolute;
+    top: 0
+}
+
+.minimize .sidebar-control {
+    gap: 13px;
+    max-width: 90px;
+    padding: 15px 11px
+}
+
+.minimize #toggle-theme-btn {
+    display: none;
+    opacity: 0;
+    visibility: hidden
+}
+
+.dark .minimize .sun-icon {
+    display: none
+}
+
+.dark .minimize .sidemenu-item.active .child-menu {
+    background: var(--gray-900);
+    border-color: var(--gray-700)
+}
+
+.authentication-sign-in-page aside, html:not(.dark) .minimize .moon-icon {
+    display: none
+}
+
+.authentication-sign-in-page #layout {
+    display: flex;
+    flex-direction: column
+}
+
+.authentication-sign-in-page .logo {
+    display: block;
+    order: -10000
+}
+
+.authentication-sign-in-page .user-noti {
+    opacity: 0;
+    visibility: hidden
+}
+
+.add-new-job-page aside, .crm-customer-details-page aside, .crm-customers-page aside, .crm-dashboard-page aside, .crm-events-page aside, .jobs-listing-1-page aside, .jobs-listing-2-page aside {
+    display: none
+}
+
+.add-new-job-page #layout, .crm-customer-details-page #layout, .crm-customers-page #layout, .crm-dashboard-page #layout, .crm-events-page #layout, .jobs-listing-1-page #layout, .jobs-listing-2-page #layout {
+    display: flex;
+    flex-direction: column
+}
+
+.add-new-job-page .logo, .crm-customer-details-page .logo, .crm-customers-page .logo, .crm-dashboard-page .logo, .crm-events-page .logo, .jobs-listing-1-page .logo, .jobs-listing-2-page .logo {
+    display: block;
+    order: -10000
+}
+
+.password-toggle {
     display: flex;
     align-items: center;
     justify-content: center;
-    cursor: pointer!important;
+    cursor: pointer !important;
 }
+
+
+.alert {
+    padding: 20px;
+    color: white;
+}
+
+.danger, .error {
+    background-color: #f44336;
+}
+
+.success {
+    background-color: #4CAF50;
+}
+
+.info {
+    background-color: #2196F3;
+}
+
+.warning {
+    background-color: #ff9800;
+}
+
+.closebtn {
+    margin-left: 15px;
+    color: white;
+    font-weight: bold;
+    float: right;
+    font-size: 22px;
+    line-height: 20px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.closebtn:hover {
+    color: black;
+}
+
 /*# sourceMappingURL=style.min.css.map */

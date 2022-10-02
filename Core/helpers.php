@@ -362,7 +362,7 @@ function controllerResponse($headers, $message = "", $data = null, $status = tru
     if ($returnType == "json") {
         response(["message" => $message, 'status' => $status, 'data' => $data], $status_code);
     } else if ($returnType == "message") {
-        message($message, $status && ($status_code == 200 || $status_code == 201) ? "success" : "danger");
+        message($message, is_bool($status) ? ($status && ($status_code == 200 || $status_code == 201) ? "success" : "danger") : $status);
         redirect($referer);
     } else if ($returnType == "html") {
         if (!empty($htmlTemplate)) {

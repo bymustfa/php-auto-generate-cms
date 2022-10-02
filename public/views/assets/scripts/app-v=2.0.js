@@ -1,11 +1,15 @@
 var themeToggleDarkIcon = document.getElementById("theme-toggle-dark-icon"),
     themeToggleLightIcon = document.getElementById("theme-toggle-light-icon"),
     themeToggleBtn = document.getElementById("theme-toggle");
-"dark" === localStorage.getItem("color-theme") || !("color-theme" in localStorage) && window.matchMedia("(prefers-color-scheme: dark)").matches ? (document.documentElement.classList.add("dark"), themeToggleBtn.checked = !1) : (document.documentElement.classList.remove("dark"), themeToggleBtn.checked = !0), [themeToggleDarkIcon, themeToggleLightIcon, themeToggleBtn].forEach((e => {
-    e.addEventListener("click", (function (e) {
-        return e.stopPropagation(), localStorage.getItem("color-theme") ? "light" === localStorage.getItem("color-theme") ? (document.documentElement.classList.add("dark"), localStorage.setItem("color-theme", "dark"), void (themeToggleBtn.checked = !1)) : (document.documentElement.classList.remove("dark"), localStorage.setItem("color-theme", "light"), void (themeToggleBtn.checked = !0)) : document.documentElement.classList.contains("dark") ? (document.documentElement.classList.remove("dark"), void localStorage.setItem("color-theme", "light")) : (document.documentElement.classList.add("dark"), void localStorage.setItem("color-theme", "dark"))
-    }))
-}));
+
+if (themeToggleBtn && themeToggleBtn !== null) {
+    "dark" === localStorage.getItem("color-theme") || !("color-theme" in localStorage) && window.matchMedia("(prefers-color-scheme: dark)").matches ? (document.documentElement.classList.add("dark"), themeToggleBtn.checked = !1) : (document.documentElement.classList.remove("dark"), themeToggleBtn.checked = !0), [themeToggleDarkIcon, themeToggleLightIcon, themeToggleBtn].forEach((e => {
+        e.addEventListener("click", (function (e) {
+            return e.stopPropagation(), localStorage.getItem("color-theme") ? "light" === localStorage.getItem("color-theme") ? (document.documentElement.classList.add("dark"), localStorage.setItem("color-theme", "dark"), void (themeToggleBtn.checked = !1)) : (document.documentElement.classList.remove("dark"), localStorage.setItem("color-theme", "light"), void (themeToggleBtn.checked = !0)) : document.documentElement.classList.contains("dark") ? (document.documentElement.classList.remove("dark"), void localStorage.setItem("color-theme", "light")) : (document.documentElement.classList.add("dark"), void localStorage.setItem("color-theme", "dark"))
+        }))
+    }));
+}
+
 let sideBarBtn = document.getElementById("sidebar-btn"), sideBarExpandBtn = document.getElementById("sidebar-expand"),
     layout = document.getElementById("layout");
 

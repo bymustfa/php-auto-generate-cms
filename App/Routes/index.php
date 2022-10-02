@@ -5,11 +5,15 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 
-$app->router->get('/', 'FrontController@Index');
 
-if (file_exists(__DIR__ . '/content/index.route.php')) {
-    require __DIR__ . '/content/index.route.php';
-}
+$app->router->group("/", function ($router) {
+    $router->get('/', 'FrontController@Index');
+}, ['before' => 'SuperAdminAuth']);
+
+
+$app->router->get('/login', 'FrontController@Login');
+$app->router->post('/login', 'BackendController@Login');
+
 
 if (file_exists(__DIR__ . '/setup/index.route.php')) {
     require __DIR__ . '/setup/index.route.php';

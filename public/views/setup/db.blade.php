@@ -5,9 +5,7 @@
 
     <div class="border bg-neutral-bg border-neutral dark:bg-dark-neutral-bg dark:border-dark-neutral-border rounded-2xl px-[25px] pt-[25px] pb-[68px]">
         <form class="flex flex-col gap-x-5 " action="{{ base_url("setup/db")}}"
-              method="POST"
-
-            >
+              method="POST"    >
 
             @include('components.form.input', ['label' => 'Host', 'placeholder' => 'Host', 'required' => true, 'name' => 'host', 'value' =>  config("DB_HOST")])
             @include('components.form.input', ['label' => 'User', 'placeholder' => 'User', 'required' => true, 'name' => 'user', 'value' =>  config("DB_USER")])
