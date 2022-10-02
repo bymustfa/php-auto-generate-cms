@@ -13,7 +13,7 @@ class View
 
     private $validator;
 
-//    public_old function __construct(Validator $validator)
+//    public function __construct(Validator $validator)
 //    {
 //        $this->validator = $validator;
 //    }

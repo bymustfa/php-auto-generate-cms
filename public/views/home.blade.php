@@ -1,1 +1,6 @@
-<h1>Home</h1>
+@extends('shared.layout')
+@section('title', 'Dashboard')
+
+@section('content')
+AAA
+@endsection

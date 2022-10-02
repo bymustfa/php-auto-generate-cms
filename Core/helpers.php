@@ -177,7 +177,7 @@ function store_url($url = "")
  */
 function assets($path = "")
 {
-    return base_url("public_old/views/assets/" . $url);
+    return base_url("public/views/assets/" . $path);
 }
 
 
@@ -352,8 +352,9 @@ function guid($data = null)
 
 function controllerResponse($headers, $message = "", $data = null, $status = true, $status_code = 200)
 {
+    $requestURL = $_SERVER['REQUEST_URI'];
     $referer = isset($headers['referer'][0]) ? $headers['referer'][0] : (isset($headers['Referer'][0]) ? $headers['Referer'][0] : base_url(''));
-    $returnType = isset($headers['Return-Type'][0]) ? $headers['Return-Type'][0] : (isset($headers['return-type'][0]) ? $headers['return-type'][0] : "json");
+    $returnType = isset($headers['Return-Type'][0]) ? $headers['Return-Type'][0] : (isset($headers['return-type'][0]) ? $headers['return-type'][0] : (strpos($requestURL, 'api') ? "json" : "message"));
     $htmlTemplate = isset($headers['Html-Template'][0]) ? $headers['Html-Template'][0] : (isset($headers['html-template'][0]) ? $headers['html-template'][0] : null);
     $returnType = strtolower($returnType);
 

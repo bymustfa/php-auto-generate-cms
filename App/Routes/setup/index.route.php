@@ -3,46 +3,12 @@
 use Symfony\Component\HttpFoundation\Request;
 
 $app->router->group("/setup", function ($router) {
-    $router->get("/", function () {
-        include __DIR__ . "/ui/index.setup.php";
-    });
+    $router->get("/", 'SetupController@list');
 
 
-    $router->get("/db", function () {
-        include __DIR__ . "/ui/database.setup.php";
-    });
+    $router->get("/db", 'SetupController@db');
 
-    $router->post("/db", function () {
-        $db["host"] = post("host");
-        $db["user"] = post("user");
-        $db["password"] = post("password");
-        $db["database"] = post("database");
-        $db["prefix"] = post("prefix");
-
-        $db["host"] = $db["host"] ? $db["host"] : config("DB_HOST");
-        $db["user"] = $db["user"] ? $db["user"] : config("DB_USER");
-        $db["password"] = $db["password"] ? $db["password"] : config("DB_PASSWORD");
-        $db["database"] = $db["database"] ? $db["database"] : config("DB_NAME");
-        $db["prefix"] = $db["prefix"] ? $db["prefix"] : config("DB_PREFIX");
-
-
-        $dbEnv = "<?php 
-    \$dbENV = [
-        'DB_HOST' => '" . $db["host"] . "',
-        'DB_NAME' => '" . $db["database"] . "',
-        'DB_USER' => '" . $db["user"] . "',
-        'DB_PASSWORD' => '" . $db["password"] . "',
-        'DB_PREFIX' => '" . $db["prefix"] . "',
-    ];
-    ?>";
-
-        $write = file_put_contents(__DIR__ . '/../../../ENV/db.env.php', $dbEnv);
-        if ($write) {
-            echo "Success";
-        } else {
-            echo "Error";
-        }
-    });
+    $router->post("/db", 'SetupController@dbSave');
 
 
     $router->get("/admin", function () {
