@@ -15,6 +15,9 @@ class BackendController extends Controller
             $userName = post("username");
             $password = post("password");
 
+            $remember = post("remember");
+
+
             $superAdmin = SuperAdmin::where('superadmin_name', $userName)->first();
 
             if ($superAdmin) {
@@ -22,6 +25,16 @@ class BackendController extends Controller
                 if ($passwordControl && $superAdmin->superadmin_status == 1) {
                     sesion()->create("superadmin_login", true);
                     sesion()->create("superadmin_id", $superAdmin->id);
+
+
+                    if ($remember) {
+                        $rememberToken = createToken(['superadmin_id' => $superAdmin->id, 'token' => $superAdmin->superadmin_token]);
+                        $expire = time() + 60 * 60 * 24;
+                        setcookie("remember_superadmin_token", $rememberToken, time() + $expire, "/");
+                    } else {
+                        setcookie("remember_superadmin_token", "", time() - 3600, "/");
+                    }
+
                     redirect(base_url());
 
 
@@ -36,7 +49,6 @@ class BackendController extends Controller
             controllerResponse($headers, $e->getMessage(), null, 'danger');
         }
     }
-
 
 
 }

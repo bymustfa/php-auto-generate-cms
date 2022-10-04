@@ -21,7 +21,7 @@ class SetupController extends Controller
 
     public function admin()
     {
-        $superAdmin =SuperAdmin::get()->first();
+        $superAdmin = SuperAdmin::get()->first();
         return $this->view('setup/admin', compact('superAdmin'));
     }
 
@@ -89,10 +89,13 @@ class SetupController extends Controller
                 `id` int(11) NOT NULL,
                 `superadmin_name` varchar(100) NOT NULL,
                 `superadmin_password` text NOT NULL,
-                `superadmin_status` tinyint(1) NOT NULL DEFAULT '1'
+                `superadmin_status` tinyint(1) NOT NULL DEFAULT '1',
+                `superadmin_token` text NOT NULL,                
               ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;");
 
-                sql("INSERT INTO $adminTableName SET superadmin_name = '$adminName', superadmin_password= '$adminPassword' ");
+                $token = md5(uniqid());
+
+                sql("INSERT INTO $adminTableName SET superadmin_name = '$adminName', superadmin_password= '$adminPassword', superadmin_token = '$token' ");
                 controllerResponse($headers, "Admin Setup Success");
 
 

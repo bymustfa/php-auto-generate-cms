@@ -3,9 +3,6 @@
 
 @section('content')
 
-
-
-
     <form class="rounded-2xl bg-white mx-auto p-10  max-w-[440px] my-[84px] dark:bg-[#1F2128]"
           action="{{base_url("login")}}"
           method="POST">
@@ -26,6 +23,7 @@
 
             @include('components.form.input', ['label' => 'Username', 'placeholder' => 'Username', 'required' => true, 'name' => 'username'])
             @include('components.form.input', ['label' => 'Password', 'placeholder' => 'Password', 'required' => true, 'name' => 'password', 'type' => 'password'])
+            @include('components.form.input', ['label' => 'Remember Me',  'name' => 'remember', 'type' => 'checkbox', 'value' => 1])
 
 
         </div>
@@ -35,6 +33,5 @@
         </button>
 
     </form>
-
 
 @endsection

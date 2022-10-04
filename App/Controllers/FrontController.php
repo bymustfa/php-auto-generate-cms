@@ -17,35 +17,35 @@ class FrontController extends Controller
     public function Index()
     {
 
-        $generator = new \Core\Generator();
+//        $generator = new \Core\Generator();
+//
+//        $schema = $generator->createSchema("restaurants", [
+//            "name" => [
+//                'type' => 'string',
+//                'default' => null,
+//                'min' => 3,
+//                'max' => 50,
+//            ],
+//            "stars" => [
+//                'type' => 'number',
+//                'default' => 1,
+//                'min' => 1,
+//                'max' => 5,
+//            ],
+//            "address" => [
+//                'type' => 'string',
+//                'default' => null,
+//                'min' => 10,
+//                'max' => 255,
+//            ],
+//            "status" => [
+//                'type' => 'boolean',
+//                'default' => 1,
+//            ],
+//        ]);
 
-        $schema = $generator->createSchema("restaurants", [
-            "name" => [
-                'type' => 'string',
-                'default' => null,
-                'min' => 3,
-                'max' => 50,
-            ],
-            "stars" => [
-                'type' => 'number',
-                'default' => 1,
-                'min' => 1,
-                'max' => 5,
-            ],
-            "address" => [
-                'type' => 'string',
-                'default' => null,
-                'min' => 10,
-                'max' => 255,
-            ],
-            "status" => [
-                'type' => 'boolean',
-                'default' => 1,
-            ],
-        ]);
 
-
-//        return $this->view('home');
+        return $this->view('home');
     }
 
 

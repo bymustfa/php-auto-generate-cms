@@ -17,7 +17,7 @@ function post($data = null)
             }
             return $_POST;
         } else {
-            return $_POST ? dataClear($_POST[$data]) : "";
+            return isset($_POST[$data]) ? dataClear($_POST[$data]) : "";
         }
     } else {
         if (isset($_POST) && is_array($_POST)) {
@@ -264,6 +264,22 @@ function cookie($name)
         return json_decode($_COOKIE[$name]);
     }
     return false;
+}
+
+function token()
+{
+    return \Core\Token::getInstance();
+}
+
+
+function createToken($payload = [])
+{
+    return token()->generate($payload);
+}
+
+function decodeToken($token)
+{
+    return token()->decode($token);
 }
 
 /**

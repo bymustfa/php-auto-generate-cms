@@ -11,12 +11,14 @@ $app->router->group("/", function ($router) {
     $router->get('/', 'FrontController@Index');
 
     $router->group('/content', function ($contentRouter) {
+        $contentRouter->get('/', 'FrontController@ContentList');
         $contentRouter->get('/list', 'FrontController@ContentList');
         $contentRouter->get('/create', 'FrontController@ContentCreate');
     });
 
 
     $router->group('/media', function ($mediaRouter) {
+        $mediaRouter->get('/', 'FrontController@MediaList');
         $mediaRouter->get('/list', 'FrontController@MediaList');
         $mediaRouter->get('/create', 'FrontController@MediaCreate');
     });

@@ -10,7 +10,7 @@
 
         <div class="pt-[106px] lg:pt-[35px] pb-[18px]">
 
-            @include('components.menu.list-menu', [ 'title' => 'Content Manager', 'href' => 'content/list', 'iconName' => 'icon-cms'  ])
+            @include('components.menu.list-menu', [ 'title' => 'Content Manager', 'href' => 'content', 'iconName' => 'icon-cms'  ])
             @include('components.menu.list-menu', [ 'title' => 'Media Library', 'href' => 'media/list', 'iconName' => 'icon-insert-image'])
             <div class="divider"></div>
             @include('components.menu.list-menu', [ 'title' => 'Setup', 'href' => 'setup', 'iconName' => 'icon-flash'])

@@ -303,8 +303,9 @@ $template
             $controllerName = str_replace(" ", "", ucwords(str_replace("_", " ", $contentName))) . "Controller";
             $modelName = str_replace(" ", "", ucwords(str_replace("_", " ", $contentName)));
 
-
             $schemaDatas = [
+                'guid' => guid(),
+                'display_name' => $contentName,
                 'table_name' => $tableName,
                 'controller_name' => $controllerName,
                 'model_name' => $modelName,
@@ -357,6 +358,47 @@ $template
             ];
         }
 
+    }
+
+    public static function getSchemaList()
+    {
+        try {
+            $folderName = "App/Schemas/";
+
+            // just json files
+            $files = glob($folderName . "*.json");
+
+            $schemaList = [];
+            foreach ($files as $file) {
+                $schemaList[] = json_decode(file_get_contents($file), true);
+            }
+
+
+            if ($schemaList && count($schemaList) > 0) {
+                return [
+                    "status" => true,
+                    "message" => "Schema list found",
+                    'data' => [
+                        'count' => count($schemaList),
+                        'list' => $schemaList
+                    ]
+                ];
+            } else {
+                return [
+                    "status" => true,
+                    "message" => "No schema found",
+                    'data' => null
+                ];
+            }
+
+        } catch (\Exception $e) {
+            echo $e->getMessage();
+            return [
+                "status" => false,
+                "message" => $e->getMessage(),
+                'data' => null
+            ];
+        }
     }
 
     function controllerTemplate($modelName)
