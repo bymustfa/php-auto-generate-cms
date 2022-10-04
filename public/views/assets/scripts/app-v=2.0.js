@@ -281,20 +281,29 @@ for (let e = 0; e < listGridBtn.length; e++) listGridBtn[e].addEventListener("cl
     e[0].className = e[0].className.replace(" active", ""), this.className += " active", localStorage.setItem("activeClass", "true")
 }));
 
-function makeSidebarActive(e) {
-    e.siblings().each((function () {
-        $(this).removeClass("active")
-    })), e.addClass("active")
-}
+// function makeSidebarActive(e) {
+//     e.siblings().each((function () {
+//         $(this).removeClass("active")
+//     })), e.addClass("active")
+// }
 
 $(document).ready((function () {
-    if (localStorage) {
-        var e = localStorage.sideMenuItem;
-        makeSidebarActive($(".sidemenu-item").eq(e))
-    }
-    $(".sidemenu-item").click((function () {
-        localStorage && (localStorage.sideMenuItem = $(this).index()), makeSidebarActive($(this))
-    }))
+
+
+    // if (localStorage) {
+    //     var e = localStorage.sideMenuItem;
+    //     makeSidebarActive($(".sidemenu-item").eq(e))
+    // }
+    // $(".sidemenu-item").click((function () {
+    //     if (localStorage) {
+    //         if ($(this).hasClass('active')) {
+    //             localStorage.sideMenuItem = null
+    //         } else {
+    //             localStorage.sideMenuItem = $(this).index()
+    //         }
+    //     }
+    //     makeSidebarActive($(this))
+    // }))
 }));
 
 // const detailButtons = document.querySelectorAll(".show-detail"), detailModal = document.getElementById("details-modal"),

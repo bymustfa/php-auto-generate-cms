@@ -9,6 +9,7 @@ class GeneratorHelpers
         'string' => 'VARCHAR',
         'slug' => 'VARCHAR',
         'text' => 'TEXT',
+        'rich-text' => 'TEXT',
         'number' => 'INT',
         'boolean' => 'TINYINT',
         'date' => 'TIMESTAMP',
@@ -20,11 +21,34 @@ class GeneratorHelpers
         'string' => '255',
         'slug' => '255',
         'text' => '',
+        'rich-text' => '',
         'number' => '',
         'boolean' => '',
         'date' => '',
         'email' => '55',
         'password' => '',
+    ];
+
+    public $formTypes = [
+        'string' => 'text',
+        'slug' => 'text',
+        'text' => 'textarea',
+        'rich-text' => 'textarea',
+        'number' => 'number',
+        'boolean' => 'checkbox',
+        'date' => 'date',
+        'email' => 'email',
+        'password' => 'password',
+    ];
+
+    public $relationTypes = [
+        'one-to-one' => 'hasOne',
+        'one-to-many' => 'hasMany',
+        'many-to-many' => 'belongsToMany',
+
+        'hasMany' => 'one-to-many',
+        'hasOne' => 'one-to-one',
+        'belongsToMany' => 'many-to-many',
     ];
 
     public function columnGenerateForSQL($columnName, $columnType, $default = null, $notNull = false)

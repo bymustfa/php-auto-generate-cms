@@ -44,6 +44,9 @@ class Auth
         return $this->segment->get($key);
     }
 
+    public function getAll(){
+        return $this->segment->get();
+    }
 
     public function allSessionClear()
     {

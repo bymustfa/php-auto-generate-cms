@@ -155,10 +155,9 @@ $template
         }
     }
 
-    public function createTable($contentName, $contents = [], $modelCreate = true)
+    public function createTable($contentName, $schemaColumns)
     {
         try {
-
             // $contents example
             // $contents = [
             // "name" => [
@@ -179,7 +178,7 @@ $template
             // ],
 
             $columns = "";
-            foreach ($contents as $key => $value) {
+            foreach ($schemaColumns as $key => $value) {
                 $default = isset($value['default']) ? $value['default'] : null;
                 $type = isset($value['type']) ? $value['type'] : "string";
                 $columns .= $this->columnGenerateForSQL($key, $type, $default) . ",";
@@ -198,9 +197,6 @@ $template
 
             sql($createSQL);
 
-            if ($modelCreate) {
-                return $this->createModel($tableSQLName, $tableName);
-            }
             return [
                 'status' => true,
                 'message' => "Table created successfully",
@@ -214,6 +210,7 @@ $template
             ];
         }
     }
+
 
     public function renameTable($oldTableName, $newTableName, $isCMS = true)
     {
@@ -279,6 +276,88 @@ $template
         }
     }
 
+
+    public function createSchema($contentName, $schemaColumns)
+    {
+        try {
+            $schemaFolder = "App/Schemas/";
+            $columns = [];
+            foreach ($schemaColumns as $key => $value) {
+                $default = isset($value['default']) ? $value['default'] : null;
+                $type = isset($value['type']) ? $value['type'] : "string";
+                $formType = $this->formTypes[$type];
+                $min = isset($value['min']) ? $value['min'] : null;
+                $max = isset($value['max']) ? $value['max'] : null;
+
+                $columns[] = [
+                    'name' => $key,
+                    'type' => $type,
+                    'form_type' => $formType,
+                    'min' => $min,
+                    'max' => $max,
+                    'default' => $default,
+                ];
+            }
+
+            $tableName = config("DB_PREFIX") . slug($contentName, "_");
+            $controllerName = str_replace(" ", "", ucwords(str_replace("_", " ", $contentName))) . "Controller";
+            $modelName = str_replace(" ", "", ucwords(str_replace("_", " ", $contentName)));
+
+
+            $schemaDatas = [
+                'table_name' => $tableName,
+                'controller_name' => $controllerName,
+                'model_name' => $modelName,
+                'route_name' => $contentName,
+                'primary_key' => 'id',
+                'columns' => $columns
+            ];
+
+
+            // convert json and save json file $schemaFolder
+            $schemaFile = $schemaFolder . $contentName . ".json";
+            $schemaFileContent = json_encode($schemaDatas, JSON_PRETTY_PRINT);
+            file_put_contents($schemaFile, $schemaFileContent);
+
+            return [
+                'status' => true,
+                'message' => "Schema created successfully",
+                'schema_file' => $schemaFile,
+                'schema_file_content' => $schemaFileContent
+            ];
+
+
+        } catch (\Exception $e) {
+            echo $e->getMessage();
+            return [
+                "status" => false,
+                "message" => $e->getMessage()
+            ];
+        }
+    }
+
+    public function updateSchema($oldSchemaName, $newSchemaName, $schemaColumns)
+    {
+        try {
+            // remove old schema file
+            $schemaFolder = "App/Schemas/";
+            $oldSchemaFile = $schemaFolder . $oldSchemaName . ".json";
+            if (file_exists($oldSchemaFile)) {
+                unlink($oldSchemaFile);
+            }
+
+            $createSchema = $this->createSchema($newSchemaName, $schemaColumns);
+
+            return $createSchema;
+        } catch (\Exception $e) {
+            echo $e->getMessage();
+            return [
+                "status" => false,
+                "message" => $e->getMessage()
+            ];
+        }
+
+    }
 
     function controllerTemplate($modelName)
     {

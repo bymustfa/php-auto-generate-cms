@@ -1,8 +1,10 @@
 <header class="flex items-center justify-between  bg-neutral-bg p-5 gap-5 md:py-6 md:pl-[25px] md:pr-[38px] lg:flex-nowrap dark:bg-dark-neutral-bg lg:gap-0">
 
-    <h2 class="capitalize text-gray-1100 font-bold text-[28px] leading-[35px] mb-[13px] dark:text-gray-dark-1100">
-        @yield('title', "")
-    </h2>
+
+       <h2 class="capitalize text-gray-1100 font-bold text-[28px] leading-[35px] mb-[13px] dark:text-gray-dark-1100">
+           @yield('title', "")
+       </h2>
+
 
     <div class="flex items-center justify-content-end " style="justify-content: flex-end;">
 

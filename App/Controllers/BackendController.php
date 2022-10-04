@@ -19,9 +19,10 @@ class BackendController extends Controller
 
             if ($superAdmin) {
                 $passwordControl = passwodVerify($password, $superAdmin->superadmin_password);
-                if ($passwordControl) {
-                    auth()->create("superadmin_login", true);
-                    auth()->create("superadmin_id", $superAdmin->id);
+                if ($passwordControl && $superAdmin->superadmin_status == 1) {
+                    sesion()->create("superadmin_login", true);
+                    sesion()->create("superadmin_id", $superAdmin->id);
+                    redirect(base_url());
 
 
                 } else {
@@ -35,6 +36,8 @@ class BackendController extends Controller
             controllerResponse($headers, $e->getMessage(), null, 'danger');
         }
     }
+
+
 
 }
 

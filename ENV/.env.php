@@ -2,6 +2,7 @@
 
 // $dbEnv db.env.php file
 include __DIR__ . '/db.env.php';
+include __DIR__ . '/app.env.php';
 
 
 $env = [
@@ -12,6 +13,7 @@ $env = [
 ];
 
 $env = array_merge($env, $dbENV);
+$env = array_merge($env, $appENV);
 return $env;
 
 ?>

@@ -10,17 +10,12 @@
 
         <div class="pt-[106px] lg:pt-[35px] pb-[18px]">
 
+            @include('components.menu.list-menu', [ 'title' => 'Content Manager', 'href' => 'content/list', 'iconName' => 'icon-cms'  ])
+            @include('components.menu.list-menu', [ 'title' => 'Media Library', 'href' => 'media/list', 'iconName' => 'icon-insert-image'])
+            <div class="divider"></div>
+            @include('components.menu.list-menu', [ 'title' => 'Setup', 'href' => 'setup', 'iconName' => 'icon-flash'])
 
-            <ul class="text-gray-800 child-menu ">
-                <li class="pb-2 transition-opacity duration-150 hover:opacity-75 dark:text-white">
-                    <a href="{{base_url()}}">Dashboard</a>
-                </li>
 
-                <li class="pb-2 transition-opacity duration-150 hover:opacity-75 dark:text-white">
-                    <a  href="{{base_url('setup')}}">Setup</a>
-                </li>
-
-            </ul>
 
 
         </div>

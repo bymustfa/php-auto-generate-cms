@@ -148,7 +148,7 @@ function passwodVerify($pass, $hash)
 /**
  * @return \Core\Auth
  */
-function auth()
+function sesion()
 {
     return \Core\Auth::getInstance();
 }
@@ -376,6 +376,11 @@ function controllerResponse($headers, $message = "", $data = null, $status = tru
 
 
     }
+}
+
+function activeClass($href, $className = "active")
+{
+    return strpos($_SERVER['REQUEST_URI'], $href) ? $className : "";
 }
 
 

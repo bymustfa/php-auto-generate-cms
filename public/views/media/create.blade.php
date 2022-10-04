@@ -2,5 +2,5 @@
 @section('title', 'Dashboard')
 
 @section('content')
-Content List
+Media create
 @endsection
