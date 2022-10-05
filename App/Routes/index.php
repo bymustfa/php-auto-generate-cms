@@ -9,6 +9,7 @@ use Symfony\Component\HttpFoundation\Response;
 
 $app->router->group("/", function ($router) {
     $router->get('/', 'FrontController@Index');
+    $router->get('/logout', 'BackendController@Logout');
 
     $router->group('/content', function ($contentRouter) {
         $contentRouter->get('/', 'FrontController@ContentList');

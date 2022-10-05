@@ -25,6 +25,7 @@ class BackendController extends Controller
                 if ($passwordControl && $superAdmin->superadmin_status == 1) {
                     sesion()->create("superadmin_login", true);
                     sesion()->create("superadmin_id", $superAdmin->id);
+                    sesion()->create("superadmin_name", $superAdmin->superadmin_name);
 
 
                     if ($remember) {
@@ -48,6 +49,15 @@ class BackendController extends Controller
         } catch (\Exception $e) {
             controllerResponse($headers, $e->getMessage(), null, 'danger');
         }
+    }
+
+    public function Logout()
+    {
+        sesion()->remove('superadmin_login');
+        sesion()->remove('superadmin_id');
+        sesion()->remove('superadmin_name');
+        setcookie("remember_superadmin_token", "", time() - 3600, "/");
+        redirect(base_url('login'));
     }
 
 
