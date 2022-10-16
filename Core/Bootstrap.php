@@ -18,7 +18,6 @@ class Bootstrap
 {
 
     public $router;
-    public $view;
     public $validator;
     public $mailler;
     public $token;
@@ -28,9 +27,9 @@ class Bootstrap
         DotEnv::load(dirname(__DIR__) . '/ENV/.env.php');
         $whoops = new Run();
         $whoops->pushHandler(new PrettyPageHandler());
-        if (config('DEVELOPMENT')) {
-            $whoops->register();
-        }
+//        if (config('DEVELOPMENT')) {
+//            $whoops->register();
+//        }
 
 
         $capsule = new Capsule;
@@ -62,11 +61,6 @@ class Bootstrap
             ]
         ]);
 
-//        $this->validator = new Validator($_POST);
-//        Validator::langDir(dirname(__DIR__) . '/utils/validator_lang');
-//        Validator::lang('tr');
-//        $this->view = new View($this->validator);
-        $this->view = new View();
 
         $this->mailler = new Mail();
         $this->token = new Token();

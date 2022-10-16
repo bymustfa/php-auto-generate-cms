@@ -9,7 +9,8 @@ $env = [
     'BASE_URL' => 'http://localhost:99/cms/',
     'DEVELOPMENT' => true,
     'SECRET_KEY' => '2C&I3AtF20',
-    'LOCALE' => 'tr_TR'
+    'LOCALE' => 'tr_TR',
+    'MEDIA_LIBRARY_PATH' => 'uploads',
 ];
 
 $env = array_merge($env, $dbENV);

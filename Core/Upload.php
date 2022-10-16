@@ -5,129 +5,272 @@ namespace Core;
 
 class Upload
 {
-    private static $instance;
-    public $upload;
-    public $file;
 
-    public function __construct($name)
-    {
-        if (is_array($name)) {
-            $this->upload = new \Verot\Upload\Upload($name, config('LOCALE'));
-        } else {
-            $this->upload = new \Verot\Upload\Upload($_FILES[$name], config('LOCALE'));
-        }
-    }
+    public static $file;
 
-    public static function getInstance($name)
-    {
-        if (!isset(self::$instance)) {
-            self::$instance = new self($name);
-        }
-        return self::$instance;
-    }
+    static $fileTypes = [
+        'image' => [
+            "jpeg",
+            "png",
+            "gif",
+            "bmp",
+            "webp",
+            "svg+xml",
+            "svg",
+        ],
+        'audio' => [
+            "mpeg",
+            "mp3",
+            "ogg",
+            "wav"
+        ],
+        'video' => [
+            "mp4",
+            "ogg",
+            "webm",
+            "avi",
+            "mpeg",
+            "quicktime"
+        ]
+    ];
 
-    public function rename($name)
+    static $notAlowedTypes = [
+        "application/x-php",
+        "application/javascript",
+        "application/x-javascript",
+        "application/x-httpd-php",
+        "application/x-httpd-php-source",
+        "application/x-httpd-php3",
+        "application/x-httpd-php3-preprocessed",
+        "application/x-httpd-php4",
+        "application/x-httpd-php5",
+        "application/x-httpd-php7",
+        "application/x-httpd-phps",
+        "application/x-httpd-php-s",
+        "application/x-httpd-php-source",
+        "application/x-javascript",
+        "application/x-shockwave-flash",
+        "application/xhtml+xml",
+        "application/xml",
+        "application/xml-dtd",
+        "application/xml-external-parsed-entity",
+        "application/xslt+xml",
+        "application/xspf+xml",
+        "application/x-xpinstall",
+        "application/zip",
+        "application/x-gzip",
+        "application/x-bzip2",
+    ];
+
+    public function __construct($file)
     {
-        $this->upload->file_new_name_body = $name;
+        self::$file = $file;
         return $this;
     }
 
-    public function options(array $options)
-    {
-        foreach ($options as $key => $option) {
-            $this->upload->{$key} = $option;
-        }
-        return $this;
-    }
 
-    public function resize($width, $height = null, $crop = true)
+    private static function fileTypeDetect()
     {
-        $this->upload->image_resize = true;
-        $this->upload->image_x = $width;
-        if ($height) {
-            $this->upload->image_y = $height;
-            $this->upload->image_ratio_crop = $crop;
-        } else {
-            $this->upload->image_ratio_y = true;
-        }
-        return $this;
-    }
+        $fileType = self::$file['type'];
 
-    public function convert($ext)
-    {
-        $this->upload->image_convert = $ext;
-        return $this;
-    }
-
-    public function compress($percent = 0)
-    {
-        $this->upload->png_compression = $percent;
-        return $this;
-    }
-
-    public function watermark($text = null)
-    {
-        if ($text) {
-            $this->upload->image_unsharp = true;
-            $this->upload->image_border = '0 0 16 0';
-            $this->upload->image_border_color = '#000000';
-            $this->upload->image_text = $text;
-            $this->upload->image_text_font = 2;
-            $this->upload->image_text_position = 'B';
-            $this->upload->image_text_padding_y = 2;
-        }
-        return $this;
-    }
-
-    public function prefix($prefix)
-    {
-        $this->upload->file_name_body_pre = $prefix . '_';
-        return $this;
-    }
-
-    public function allowed($mimes)
-    {
-        $this->upload->allowed = $mimes;
-        return $this;
-    }
-
-    public function onlyImages()
-    {
-        $this->upload->allowed = ['image/*'];
-        return $this;
-    }
-
-    public function to($path)
-    {
-        if ($this->upload->uploaded) {
-            $this->upload->process(dirname(__DIR__) . '/' . $path);
-            if ($this->upload->processed) {
-                $this->file = $this->upload->file_dst_name;
+        foreach (self::$fileTypes as $key => $fileTypes) {
+            foreach ($fileTypes as $type) {
+                if (strpos($fileType, $type) !== false) {
+                    return $key;
+                }
             }
         }
-        return $this;
+
     }
 
-    public function getFile()
+    private static function fileName()
     {
-        return $this->upload->file_dst_name;
+        $file = self::$file;
+        $fileExtension = pathinfo($file['name'], PATHINFO_EXTENSION);
+        $dateNow = date("Y_m_d_H_i_s");
+        return $dateNow . "_" . guid() . "." . $fileExtension;
+
     }
 
-    public function getFileWithPath()
+    private static function getFileDetails()
     {
-        return $this->upload->file_dst_pathname;
+        $fileType = self::fileTypeDetect();
+        $fileName = self::$file['name'];
+        $fileSize = self::$file['size'];
+        $fileTmpName = self::$file['tmp_name'];
+        $fileExtension = pathinfo($fileName, PATHINFO_EXTENSION);
+        $newFileName = self::fileName();
+
+        return [
+            'fileType' => $fileType,
+            'fileName' => $fileName,
+            'fileSize' => $fileSize,
+            'fileTmpName' => $fileTmpName,
+            'fileExtension' => $fileExtension,
+            'newFileName' => $newFileName,
+
+        ];
     }
 
-    public function error()
+    private static function uploadImage()
     {
-        $this->upload->process();
-        return $this->upload->error;
+        try {
+            $uploadDir = "images";
+            $file = self::$file;
+
+        } catch (\Exception $e) {
+            return [
+                'status' => false,
+                'message' => $e->getMessage(),
+            ];
+        }
+    }
+
+    private static function uploadAudio()
+    {
+        $fileDetails = self::getFileDetails();
+        $fileData = [
+            'fileType' => $fileDetails['fileType'],
+            'fileName' => $fileDetails['fileName'],
+            'fileSize' => $fileDetails['fileSize'],
+            'fileExtension' => $fileDetails['fileExtension'],
+        ];
+
+        try {
+            $uploadDir = "audios";
+
+            $uploadDir = "uploads/" . $uploadDir . "/" . $fileDetails['newFileName'];
+            if (move_uploaded_file($fileDetails['fileTmpName'], $uploadDir)) {
+
+
+                return [
+                    'status' => true,
+                    'message' => "File uploaded successfully",
+                    'data' => [
+                        'fileType' => $fileDetails['fileType'],
+                        'fileName' => $fileDetails['fileName'],
+                        'fileSize' => $fileDetails['fileSize'],
+                        'fileExtension' => $fileDetails['fileExtension'],
+                        'newFileName' => $fileDetails['newFileName'],
+                        'fileUrl' => $uploadDir,
+
+                    ]
+                ];
+            } else {
+                return [
+                    'status' => false,
+                    'message' => "File not uploaded",
+                    'data' => $fileData
+                ];
+            }
+
+
+        } catch (\Exception $e) {
+            return [
+                'status' => false,
+                'message' => $e->getMessage(),
+                'data' => $fileData
+            ];
+        }
+    }
+
+    private static function uploadVideo()
+    {
+        try {
+            $uploadDir = "video";
+            $file = self::$file;
+
+        } catch (\Exception $e) {
+            return [
+                'status' => false,
+                'message' => $e->getMessage(),
+            ];
+        }
+    }
+
+    private static function uploadFile()
+    {
+        try {
+            $uploadDir = "files";
+            $file = self::$file;
+
+        } catch (\Exception $e) {
+            return [
+                'status' => false,
+                'message' => $e->getMessage(),
+            ];
+        }
     }
 
 
-    public function __destruct()
+    public static function upload()
     {
-        $this->upload->clean();
+        try {
+
+            $postMaxSize = intval(ini_get('post_max_size')) * 1024 * 1024;
+            $uploadMaxSize = intval(ini_get('upload_max_filesize')) * 1024 * 1024;
+            $maxFileUploads = intval(ini_get('max_file_uploads')) * 1024 * 1024;
+
+            $file = self::$file;
+
+            // if max file size
+            if ($file['size'] > $uploadMaxSize) {
+                return [
+                    'status' => false,
+                    'message' => "File size is too large",
+                ];
+            }
+
+
+            if (self::$file['error'] == 0) {
+                if (in_array(self::$file['type'], self::$notAlowedTypes)) {
+                    throw new \Exception("Dosya türüne izin verilmiyor.");
+                }
+                $fileType = self::fileTypeDetect();
+
+
+                if ($fileType == "image") {
+                    return self::uploadImage();
+                } elseif ($fileType == "audio") {
+                    return self::uploadAudio();
+                } elseif ($fileType == "video") {
+                    return self::uploadVideo();
+                } else {
+                    return self::uploadFile();
+                }
+
+
+//                $uploadPath = __DIR__ . "/../uploads/" . $uploadDir;
+//
+//
+//                if (move_uploaded_file($fileTmpName, $uploadPath . "/original/" . $newFileName)) {
+//                    return [
+//                        'status' => true,
+//                        'message' => "Dosya başarıyla yüklendi.",
+//                        'data' => [
+//                            'fileType' => $fileType,
+//                            'fileSize' => $fileSize,
+//                            'fileName' => $fileName,
+//                            'fileExtension' => $fileExtension,
+//                            'uploadDir' => $uploadDir,
+//                            'newFileName' => $newFileName,
+//                            'uploadPaths' => $uploadPaths
+//                        ]
+//                    ];
+//                } else {
+//                    throw new \Exception("Dosya yüklenemedi.");
+//                }
+            } else {
+                throw new \Exception("Dosya yüklenemedi.");
+            }
+
+
+        } catch (\Exception $e) {
+            return [
+                'status' => false,
+                'message' => $e->getMessage()
+            ];
+        }
     }
 
 }

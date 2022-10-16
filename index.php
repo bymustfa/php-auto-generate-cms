@@ -13,6 +13,7 @@ $app = new \Core\Bootstrap();
 
 require __DIR__ . '/App/Routes/index.php';
 
+
 $app->run();
 
 ?>

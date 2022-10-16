@@ -6,7 +6,7 @@
       "Core\\": "./Core"
     },
     "files": [
-      "./Core/helpers.php"
+      "Helpers/helpers.php"
     ]
   },
   "authors": [
