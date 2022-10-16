@@ -9,6 +9,8 @@ use Symfony\Component\HttpFoundation\Response;
 use Core\Upload;
 use Core\Controller;
 
+use App\Models\MediaLibrary;
+
 
 class MediaLibraryController extends Controller
 {
@@ -26,6 +28,7 @@ class MediaLibraryController extends Controller
     public function AddMedia(Request $request)
     {
         try {
+            MediaLibrary::beginTransaction();
             $files = $_FILES['files'];
 
             $uploadFiles = [];
@@ -42,17 +45,44 @@ class MediaLibraryController extends Controller
                 $upload = new Upload($file);
                 $uploadFile = $upload->upload();
 
+
                 if ($uploadFile && $uploadFile['status']) {
-                    $uploadFiles[] = $uploadFile['data'];
+
+                    $data = $uploadFile['data'];
+                    $uploadFiles[] = [
+                        'media_guid' => $data['newFileGuid'],
+                        'media_name' => $data['fileName'],
+                        'media_type' => $data['fileType'],
+                        'media_ext' => $data['fileExtension'],
+                        'media_paths' => is_array($data['fileUrl']) ? json_encode($data['fileUrl']) : $data['fileUrl'],
+                        'media_size' => $data['fileSize']
+                    ];
                 } else {
                     $errorFiles[] = $uploadFile['data'];
                 }
             }
 
-            response(['uploadFiles' => $uploadFiles, 'errorFiles' => $errorFiles], 200);
+
+            foreach ($uploadFiles as $key => $value) {
+                $add = MediaLibrary::create($value);
+                if (!$add) {
+                    throw new \Exception("Error Processing Request", 1);
+                } else {
+                    $id = $add->id;
+                    $uploadFiles[$key]['id'] = $id;
+                }
+            }
+
+            MediaLibrary::commit();
+            response([
+                'status' => true,
+                'message' => 'Media Add',
+                'data' => ['uploadFiles' => $uploadFiles, 'errorFiles' => $errorFiles]
+            ], 200);
 
 
         } catch (\Exception $e) {
+            MediaLibrary::rollBack();
             response([
                 'status' => false,
                 'message' => $e->getMessage(),

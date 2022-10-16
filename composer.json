@@ -34,6 +34,7 @@
     "filp/whoops": "^2.7.3",
     "firebase/php-jwt": "^6.3",
     "phplucidframe/console-table": "^1.2",
-    "mustache/mustache": "^2.14"
+    "mustache/mustache": "^2.14",
+    "gumlet/php-image-resize": "^2.0"
   }
 }

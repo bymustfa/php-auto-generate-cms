@@ -2,6 +2,9 @@
 
 namespace Core;
 
+use Gumlet\ImageResize;
+use Gumlet\ImageResizeException;
+
 
 class Upload
 {
@@ -80,6 +83,7 @@ class Upload
                 }
             }
         }
+        return "file";
 
     }
 
@@ -88,7 +92,12 @@ class Upload
         $file = self::$file;
         $fileExtension = pathinfo($file['name'], PATHINFO_EXTENSION);
         $dateNow = date("Y_m_d_H_i_s");
-        return $dateNow . "_" . guid() . "." . $fileExtension;
+        $guid = guid();
+        $newName = $dateNow . "_" . $guid . "." . $fileExtension;
+        return [
+            'guid' => $guid,
+            'name' => $newName,
+        ];
 
     }
 
@@ -99,7 +108,10 @@ class Upload
         $fileSize = self::$file['size'];
         $fileTmpName = self::$file['tmp_name'];
         $fileExtension = pathinfo($fileName, PATHINFO_EXTENSION);
-        $newFileName = self::fileName();
+        $newName = self::fileName();
+
+        $newFileName = $newName['name'];
+        $newFileGuid = $newName['guid'];
 
         return [
             'fileType' => $fileType,
@@ -108,20 +120,78 @@ class Upload
             'fileTmpName' => $fileTmpName,
             'fileExtension' => $fileExtension,
             'newFileName' => $newFileName,
+            'newFileGuid' => $newFileGuid,
 
         ];
     }
 
-    private static function uploadImage()
+
+    /**
+     * @throws ImageResizeException
+     */
+    private static function resizeImage($savePath, $fileTmpName, $width)
     {
         try {
-            $uploadDir = "images";
-            $file = self::$file;
+            $image = new ImageResize($fileTmpName);
+            $image->resizeToWidth($width);
+            $image->save($savePath);
+            return true;
+        } catch (ImageResizeException $e) {
+            return false;
+        }
+    }
+
+    private static function uploadImage()
+    {
+        $fileDetails = self::getFileDetails();
+        $fileData = [
+            'fileType' => $fileDetails['fileType'],
+            'fileName' => $fileDetails['fileName'],
+            'fileSize' => $fileDetails['fileSize'],
+            'fileExtension' => $fileDetails['fileExtension'],
+        ];
+
+        try {
+            $uploadOriginalDir = __DIR__ . "/../uploads/images/original/" . $fileDetails['newFileName'];
+
+
+            $upload200Dir = __DIR__ . "/../uploads/images/200/" . $fileDetails['newFileName'];
+            $upload750Dir = __DIR__ . "/../uploads/images/750/" . $fileDetails['newFileName'];
+
+            if (move_uploaded_file($fileDetails['fileTmpName'], $uploadOriginalDir)) {
+                $resize200 = self::resizeImage($upload200Dir, $uploadOriginalDir, 200);
+                $resize700 = self::resizeImage($upload750Dir, $uploadOriginalDir, 750);
+
+                $fileUrls = [
+                    'original' => "images/original/" . $fileDetails['newFileName'],
+                ];
+                $resize200 && $fileUrls['200'] = "images/200/" . $fileDetails['newFileName'];
+                $resize700 && $fileUrls['750'] = "images/750/" . $fileDetails['newFileName'];
+
+
+                return [
+                    'status' => true,
+                    'message' => "File uploaded successfully",
+                    'data' => [
+                        'newFileGuid' => $fileDetails['newFileGuid'],
+                        'fileType' => $fileDetails['fileType'],
+                        'fileName' => $fileDetails['fileName'],
+                        'fileSize' => $fileDetails['fileSize'],
+                        'fileExtension' => $fileDetails['fileExtension'],
+                        'newFileName' => $fileDetails['newFileName'],
+                        'fileUrl' => $fileUrls
+                    ]
+                ];
+            } else {
+
+            }
+
 
         } catch (\Exception $e) {
             return [
                 'status' => false,
                 'message' => $e->getMessage(),
+                'data' => $fileData
             ];
         }
     }
@@ -139,20 +209,19 @@ class Upload
         try {
             $uploadDir = "audios";
 
-            $uploadDir = "uploads/" . $uploadDir . "/" . $fileDetails['newFileName'];
-            if (move_uploaded_file($fileDetails['fileTmpName'], $uploadDir)) {
-
-
+            $uploadPath = "uploads/" . $uploadDir . "/" . $fileDetails['newFileName'];
+            if (move_uploaded_file($fileDetails['fileTmpName'], $uploadPath)) {
                 return [
                     'status' => true,
                     'message' => "File uploaded successfully",
                     'data' => [
+                        'newFileGuid' => $fileDetails['newFileGuid'],
                         'fileType' => $fileDetails['fileType'],
                         'fileName' => $fileDetails['fileName'],
                         'fileSize' => $fileDetails['fileSize'],
                         'fileExtension' => $fileDetails['fileExtension'],
                         'newFileName' => $fileDetails['newFileName'],
-                        'fileUrl' => $uploadDir,
+                        'fileUrl' => $uploadDir . "/" . $fileDetails['newFileName'],
 
                     ]
                 ];
@@ -176,28 +245,98 @@ class Upload
 
     private static function uploadVideo()
     {
+        $fileDetails = self::getFileDetails();
+        $fileData = [
+            'fileType' => $fileDetails['fileType'],
+            'fileName' => $fileDetails['fileName'],
+            'fileSize' => $fileDetails['fileSize'],
+            'fileExtension' => $fileDetails['fileExtension'],
+        ];
+
         try {
-            $uploadDir = "video";
-            $file = self::$file;
+            $uploadDir = "videos";
+
+            $uploadPath = "uploads/" . $uploadDir . "/" . $fileDetails['newFileName'];
+            if (move_uploaded_file($fileDetails['fileTmpName'], $uploadPath)) {
+
+
+                return [
+                    'status' => true,
+                    'message' => "File uploaded successfully",
+                    'data' => [
+                        'newFileGuid' => $fileDetails['newFileGuid'],
+                        'fileType' => $fileDetails['fileType'],
+                        'fileName' => $fileDetails['fileName'],
+                        'fileSize' => $fileDetails['fileSize'],
+                        'fileExtension' => $fileDetails['fileExtension'],
+                        'newFileName' => $fileDetails['newFileName'],
+                        'fileUrl' => $uploadDir . "/" . $fileDetails['newFileName'],
+
+                    ]
+                ];
+            } else {
+                return [
+                    'status' => false,
+                    'message' => "File not uploaded",
+                    'data' => $fileData
+                ];
+            }
+
 
         } catch (\Exception $e) {
             return [
                 'status' => false,
                 'message' => $e->getMessage(),
+                'data' => $fileData
             ];
         }
     }
 
     private static function uploadFile()
     {
+        $fileDetails = self::getFileDetails();
+        $fileData = [
+            'fileType' => $fileDetails['fileType'],
+            'fileName' => $fileDetails['fileName'],
+            'fileSize' => $fileDetails['fileSize'],
+            'fileExtension' => $fileDetails['fileExtension'],
+        ];
+
         try {
             $uploadDir = "files";
-            $file = self::$file;
+
+            $uploadPath = "uploads/" . $uploadDir . "/" . $fileDetails['newFileName'];
+            if (move_uploaded_file($fileDetails['fileTmpName'], $uploadPath)) {
+
+
+                return [
+                    'status' => true,
+                    'message' => "File uploaded successfully",
+                    'data' => [
+                        'newFileGuid' => $fileDetails['newFileGuid'],
+                        'fileType' => $fileDetails['fileType'],
+                        'fileName' => $fileDetails['fileName'],
+                        'fileSize' => $fileDetails['fileSize'],
+                        'fileExtension' => $fileDetails['fileExtension'],
+                        'newFileName' => $fileDetails['newFileName'],
+                        'fileUrl' => $uploadDir . "/" . $fileDetails['newFileName'],
+
+                    ]
+                ];
+            } else {
+                return [
+                    'status' => false,
+                    'message' => "File not uploaded",
+                    'data' => $fileData
+                ];
+            }
+
 
         } catch (\Exception $e) {
             return [
                 'status' => false,
                 'message' => $e->getMessage(),
+                'data' => $fileData
             ];
         }
     }
