@@ -3,6 +3,6 @@
 $controllerName = "API.DemoController";
 $routerPrefix = "/demo";
 
-$router->get($routerPrefix."/get-all", $controllerName . '@GetAll');
+$router->get($routerPrefix."/getAll", $controllerName . '@GetAll');
 
 ?>

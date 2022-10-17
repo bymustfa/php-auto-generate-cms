@@ -1,14 +1,17 @@
 <?php
-namespace App\Models\CMS;
+
+namespace App\Models;
+
 use Core\Model;
 
-class [ModelName] extends Model
+class RolePermissions extends Model
 {
+
     public $timestamps = false;
-    protected $table = "[TableName]";
+    protected $table = "role_permissions";
     protected $primaryKey = "id";
 
-    protected $fillable = [ [Fillable] ];
+    protected $fillable = ['demo'];
 
 
     public static function beginTransaction()
@@ -25,6 +28,6 @@ class [ModelName] extends Model
     {
         self::getConnectionResolver()->connection()->rollBack();
     }
-
 }
+
 ?>

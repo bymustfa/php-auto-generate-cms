@@ -1,6 +1,8 @@
 <?php
 
+
 namespace App\Controllers;
+
 
 
 use Symfony\Component\HttpFoundation\Request;
@@ -14,16 +16,87 @@ use App\Models\MediaLibrary;
 
 class MediaLibraryController extends Controller
 {
+
     public function GetAll()
     {
-        echo "Get All ";
+        try {
+            $medias = MediaLibrary::all();
+            response([
+                'status' => true,
+                'message' => 'Media Library Get All Success',
+                'data' => $medias
+            ]);
+        } catch (\Exception $e) {
+            response([
+                'status' => false,
+                'message' => $e->getMessage()
+            ], 500);
+        }
     }
 
     public function GetOne($id)
     {
-        echo "Get One " . $id;
+        try {
+            $media = MediaLibrary::find($id);
+            response([
+                'status' => true,
+                'message' => 'Media Library Get One Success',
+                'data' => $media
+            ]);
+        } catch (\Exception $e) {
+            response([
+                'status' => false,
+                'message' => $e->getMessage()
+            ], 500);
+        }
     }
 
+    public function DeleteMedia($id)
+    {
+        try {
+            $media = MediaLibrary::find($id);
+            if ($media) {
+                $mediaPath = $media->media_paths;
+                $jsonData = json_decode($mediaPath, true);
+
+                if (isset($jsonData)) {
+                    $pathKeys = array_keys($jsonData);
+                    foreach ($pathKeys as $key) {
+                        $path = $jsonData[$key];
+                        $path = __DIR__ . "/../../uploads/" . $path;
+                        if (file_exists($path)) {
+                            unlink($path);
+                        }
+                    }
+                } else {
+                    $path = __DIR__ . "/../../uploads/" . $mediaPath;
+
+                    if (file_exists($path)) {
+                        unlink($path);
+                    }
+                }
+
+
+                $delete = $media->delete();
+                if ($delete) {
+                    response([
+                        'status' => true,
+                        'message' => 'Media Library Delete Success'
+                    ]);
+                } else {
+                    throw new \Exception("Media Library Delete Failed");
+                }
+            } else {
+                throw new \Exception("Media Not Found");
+
+            }
+        } catch (\Exception $e) {
+            response([
+                'status' => false,
+                'message' => $e->getMessage()
+            ], 500);
+        }
+    }
 
     public function AddMedia(Request $request)
     {

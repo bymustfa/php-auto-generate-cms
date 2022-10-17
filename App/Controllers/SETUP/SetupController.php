@@ -48,7 +48,6 @@ class SetupController extends Controller
         }
     }
 
-
     public function SuperAdminSetup(Request $request)
     {
         try {
@@ -105,12 +104,17 @@ class SetupController extends Controller
         }
     }
 
-
     public function RolesSetup(Request $request)
     {
-        echo "Roles Setup";
-    }
+        try {
 
+        } catch (\Exception $e) {
+            response([
+                'status' => false,
+                'message' => $e->getMessage()
+            ], 500);
+        }
+    }
 
     public function FinishSetup(Request $request)
     {
