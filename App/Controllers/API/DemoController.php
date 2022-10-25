@@ -1,17 +1,34 @@
 <?php
 namespace App\Controllers\API;
 
-use Core\Controller;
+use App\Controllers\API\Heleley\Demo;
 use Symfony\Component\HttpFoundation\Request;
 
-class DemoController extends Controller
+use App\Models\API\RestourantModel;
+
+class DemoController extends Demo
 {
-    public function GetAll(Request $request)
+
+
+    public function GetAll()
     {
-        response([
-            'status' => true,
-            'message' => 'Demoo'
-        ]);
+        try {
+
+            response([
+                'status' => true,
+                'message' => 'All data fetched successfully',
+                'data' => [
+                    'count' => 0,
+                    'data' => $path
+                ]
+            ]);
+        } catch (\Exception $e) {
+            response([
+                'status' => false,
+                'message' => $e->getMessage(),
+                'data' => null
+            ]);
+        }
     }
 
 }

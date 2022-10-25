@@ -17,8 +17,6 @@ $app->router->group("/api", function ($router) {
     });
 
 
-
-
     foreach ($files as $file) {
         $file = $dir . $file;
         if (file_exists($file)) {

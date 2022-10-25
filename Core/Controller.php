@@ -2,17 +2,17 @@
 
 namespace Core;
 
+use Symfony\Component\HttpFoundation\Request;
+
 
 class Controller extends Bootstrap
 {
-    /**
-     * @param $view
-     * @param $data
-     * @return string
-     */
-    public function view($view, $data = [])
+
+
+    public function GetAll()
     {
-        return $this->view->show($view, $data);
+        echo "AA";
+
     }
 
 
