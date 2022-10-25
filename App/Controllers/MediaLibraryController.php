@@ -4,7 +4,6 @@
 namespace App\Controllers;
 
 
-
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -20,11 +19,14 @@ class MediaLibraryController extends Controller
     public function GetAll()
     {
         try {
-            $medias = MediaLibrary::all();
+            $datas = MediaLibrary::all();
             response([
                 'status' => true,
                 'message' => 'Media Library Get All Success',
-                'data' => $medias
+                'data' => [
+                    'count' => $datas->count(),
+                    'data' => $datas,
+                ]
             ]);
         } catch (\Exception $e) {
             response([
@@ -162,6 +164,41 @@ class MediaLibraryController extends Controller
             ]);
         }
 
+    }
+
+    public function FilterMedia(Request $request)
+    {
+        try {
+
+            $filterBody = json_decode($request->getContent(), true);
+
+            if (!isset($filterBody) || count($filterBody) === 0 || empty($filterBody) || !is_array($filterBody)) {
+                throw new \Exception("Filter Body is Empty");
+            }
+
+            $filterArray = [];
+            if (isset($filterBody) && is_array($filterBody)) {
+                foreach ($filterBody as $filter) {
+                    $filterArray[] = [$filter['field'], $filter['operator'], $filter['value']];
+                }
+            }
+            $data = MediaLibrary::where($filterArray)->get();
+            response([
+                'status' => true,
+                'message' => 'Media Library Filter Success',
+                'data' => [
+                    'count' => $data->count(),
+                    'data' => $data
+                ]
+            ]);
+
+
+        } catch (\Exception $e) {
+            response([
+                'status' => false,
+                'message' => $e->getMessage(),
+            ]);
+        }
     }
 
 

@@ -60,6 +60,17 @@ class BackendController extends Controller
         redirect(base_url('login'));
     }
 
+    public function GetFilterTypes()
+    {
+        response([
+            'status' => true,
+            'message' => 'Filter Types Get Success',
+            'data' => [
+                '=', '!=', '>', '<', '>=', '<='
+            ]
+        ]);
+    }
+
 
 }
 

@@ -62,15 +62,11 @@ function dataClear($data)
 {
     if (isset($data) && is_array($data)) {
         foreach ($data as $key => $value) {
-            if (is_bool($value)) {
-                $data[$key] = $value;
-            } else {
-                $data[$key] = htmlspecialchars(trim(strip_tags($value)));
-            }
+            $data[$key] = dataClear($value);
         }
         return $data;
     } else {
-        return $data ? htmlspecialchars(trim(strip_tags($data))) : "";
+        return isset($data) ? is_bool($data) ? ($data ? true : false) : htmlspecialchars(trim(strip_tags($data))) : "";
     }
 }
 
@@ -160,7 +156,7 @@ function sesion()
  */
 function base_url($url = "")
 {
-    return config("BASE_URL");
+    return config("BASE_URL") . $url;
 }
 
 /**
@@ -387,11 +383,36 @@ function controllerResponse($headers, $message = "", $data = null, $status = tru
     }
 }
 
-function activeClass($href, $className = "active")
+
+function toPlural($word)
 {
-    return strpos($_SERVER['REQUEST_URI'], $href) ? $className : "";
+    $inflect = new \Core\Inflect();
+    return $inflect->pluralize($word);
 }
 
+function toSingular($word)
+{
+    $inflect = new \Core\Inflect();
+    return $inflect->singularize($word);
+}
+
+
+function toCamelCase($word)
+{
+    $inflect = new \Core\Inflect();
+    return $inflect->camelize($word);
+}
+
+function toEnglish($word)
+{
+    $inflect = new \Core\Inflect();
+    return $inflect->converLetterTRToEN($word);
+}
+
+function hastNumber($word)
+{
+    return preg_match('/[0-9]/', $word);
+}
 
 /**
  * @param $tableName

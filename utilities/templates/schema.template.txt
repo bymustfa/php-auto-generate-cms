@@ -1,0 +1,66 @@
+<?php
+
+namespace App\Schemas\API;
+
+use Core\Schema;
+
+class [class_name] extends Schema
+{
+    public function __construct()
+    {
+        $this->name = '[name]';
+        $this->apiName = '[api_name]';
+        $this->displayName = '[display_name]';
+        $this->slug = '[slug]';
+        $this->tableName = '[table_name]';
+
+        $this->relations = [[relations]];
+
+        $this->fields = [];
+
+        $this->fields['id'] = [
+            'name' => 'id',
+            'type' => 'int',
+            'length' => 11,
+            'nullable' => false,
+            'autoIncrement' => true,
+        ];
+
+        [other_fields]
+
+        $this->fields['created_at'] = [
+            'name' => 'created_at',
+            'type' => 'datetime',
+            'length' => null,
+            'primary' => false,
+            'autoIncrement' => false,
+            'unique' => false,
+            'default' => "CURRENT_TIMESTAMP",
+            'index' => false,
+        ];
+
+        $this->fields['updated_at'] = [
+            'name' => 'updated_at',
+            'type' => 'datetime',
+            'length' => null,
+            'primary' => false,
+            'autoIncrement' => false,
+            'unique' => false,
+            'default' => "CURRENT_TIMESTAMP",
+            'on_update' => "CURRENT_TIMESTAMP",
+            'index' => false,
+        ];
+
+    }
+
+    public function migrateDatabase()
+    {
+        try {
+            $sql = $this->createTable();
+            sql($sql);
+            return true;
+        } catch (\Exception $e) {
+            return false;
+        }
+    }
+}
