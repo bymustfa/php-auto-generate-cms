@@ -11,6 +11,7 @@ class RestourantSchema extends Schema
         $this->name = 'Restourant';
         $this->apiName = 'restourants';
         $this->displayName = 'Restourant';
+        $this->modelName = 'RestourantModel';
         $this->slug = 'restourants';
         $this->tableName = 'cms_restourants';
 
@@ -104,6 +105,16 @@ class RestourantSchema extends Schema
             $sql = $this->createTable();
             sql($sql);
             return true;
+        } catch (\Exception $e) {
+            return false;
+        }
+    }
+
+
+    public function modelFileCreate()
+    {
+        try {
+            return $this->createModel();
         } catch (\Exception $e) {
             return false;
         }

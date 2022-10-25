@@ -2,7 +2,7 @@
 
 namespace App\Controllers;
 
-use App\Models\SuperAdmin;
+use App\Models\SuperAdminModel;
 use Symfony\Component\HttpFoundation\Request;
 use Core\Controller;
 
@@ -18,7 +18,7 @@ class BackendController extends Controller
             $remember = post("remember");
 
 
-            $superAdmin = SuperAdmin::where('superadmin_name', $userName)->first();
+            $superAdmin = SuperAdminModel::where('superadmin_name', $userName)->first();
 
             if ($superAdmin) {
                 $passwordControl = passwodVerify($password, $superAdmin->superadmin_password);

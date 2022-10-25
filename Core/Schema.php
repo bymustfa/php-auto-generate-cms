@@ -7,6 +7,7 @@ class Schema
     public $name;
     public $apiName;
     public $displayName;
+    public $modelName;
     public $slug;
     public $tableName;
     public $fields;
@@ -67,7 +68,51 @@ class Schema
 
     public function createModel()
     {
+        try {
 
+
+
+            $templateFile = __DIR__ . "/../utilities/templates/model.template.txt";
+            $template = file_get_contents($templateFile);
+
+            $template = str_replace("[class_name]", $this->displayName, $template);
+            $template = str_replace("[table_name]", $this->tableName, $template);
+
+            $ignoreFields = [
+                'id',
+                'created_at',
+                'updated_at',
+            ];
+
+            $fields = [];
+            foreach ($this->fields as $field) {
+                if (!in_array($field['name'], $ignoreFields)) {
+                    $fields[] = $field['name'];
+                }
+            }
+            $fields = implode("', '", $fields);
+
+
+
+            $template = str_replace("[fields]", "'$fields'", $template);
+
+
+
+            // TODO: Relations add
+
+            $filePath = __DIR__ . "/../App/Models/API/";
+            $fileName = $this->modelName . ".php";
+
+
+            $file = fopen($filePath . $fileName, "w");
+            fwrite($file, $template);
+            fclose($file);
+
+            return true;
+
+        } catch (\Exception $e) {
+            return false;
+        }
     }
 
 

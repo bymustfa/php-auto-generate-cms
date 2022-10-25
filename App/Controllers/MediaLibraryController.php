@@ -10,7 +10,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Core\Upload;
 use Core\Controller;
 
-use App\Models\MediaLibrary;
+use App\Models\MediaLibraryModel;
 
 
 class MediaLibraryController extends Controller
@@ -19,7 +19,7 @@ class MediaLibraryController extends Controller
     public function GetAll()
     {
         try {
-            $datas = MediaLibrary::all();
+            $datas = MediaLibraryModel::all();
             response([
                 'status' => true,
                 'message' => 'Media Library Get All Success',
@@ -39,7 +39,7 @@ class MediaLibraryController extends Controller
     public function GetOne($id)
     {
         try {
-            $media = MediaLibrary::find($id);
+            $media = MediaLibraryModel::find($id);
             response([
                 'status' => true,
                 'message' => 'Media Library Get One Success',
@@ -56,7 +56,7 @@ class MediaLibraryController extends Controller
     public function DeleteMedia($id)
     {
         try {
-            $media = MediaLibrary::find($id);
+            $media = MediaLibraryModel::find($id);
             if ($media) {
                 $mediaPath = $media->media_paths;
                 $jsonData = json_decode($mediaPath, true);
@@ -103,7 +103,7 @@ class MediaLibraryController extends Controller
     public function AddMedia(Request $request)
     {
         try {
-            MediaLibrary::beginTransaction();
+            MediaLibraryModel::beginTransaction();
             $files = $_FILES['files'];
 
             $uploadFiles = [];
@@ -139,7 +139,7 @@ class MediaLibraryController extends Controller
 
 
             foreach ($uploadFiles as $key => $value) {
-                $add = MediaLibrary::create($value);
+                $add = MediaLibraryModel::create($value);
                 if (!$add) {
                     throw new \Exception("Error Processing Request", 1);
                 } else {
@@ -148,7 +148,7 @@ class MediaLibraryController extends Controller
                 }
             }
 
-            MediaLibrary::commit();
+            MediaLibraryModel::commit();
             response([
                 'status' => true,
                 'message' => 'Media Add',
@@ -157,7 +157,7 @@ class MediaLibraryController extends Controller
 
 
         } catch (\Exception $e) {
-            MediaLibrary::rollBack();
+            MediaLibraryModel::rollBack();
             response([
                 'status' => false,
                 'message' => $e->getMessage(),
@@ -182,7 +182,7 @@ class MediaLibraryController extends Controller
                     $filterArray[] = [$filter['field'], $filter['operator'], $filter['value']];
                 }
             }
-            $data = MediaLibrary::where($filterArray)->get();
+            $data = MediaLibraryModel::where($filterArray)->get();
             response([
                 'status' => true,
                 'message' => 'Media Library Filter Success',

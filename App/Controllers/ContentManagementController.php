@@ -20,9 +20,7 @@ class ContentManagementController extends Controller
     {
         try {
 
-
             $entityBody = dataClear(json_decode($request->getContent(), true));
-
 
             if (!isset($entityBody['name']) || strlen(trim($entityBody['name'])) === 0) {
                 throw new \Exception("Name is required");
@@ -56,6 +54,7 @@ class ContentManagementController extends Controller
                 $class = 'App\\Schemas\\API\\' . $schemaName;
                 $schema = new $class();
                 $createTable = $schema->migrateDatabase();
+                $createModel = $schema->modelFileCreate();
 
                 if ($createTable) {
                     response([
@@ -67,7 +66,8 @@ class ContentManagementController extends Controller
                     throw new \Exception("Schema Created Successfully, But Table Creation Failed");
                 }
 
-
+            } else {
+                throw new \Exception("Schema Creation Failed");
             }
 
 

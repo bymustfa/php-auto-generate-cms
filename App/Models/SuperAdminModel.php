@@ -1,17 +1,14 @@
 <?php
-
 namespace App\Models;
-
 use Core\Model;
 
-class MediaLibrary extends Model
+class SuperAdminModel extends Model
 {
-
     public $timestamps = false;
-    protected $table = "media_library";
+    protected $table = "super_admin";
     protected $primaryKey = "id";
 
-    protected $fillable = ['media_guid', 'media_name', 'media_type', 'media_ext', 'media_paths', 'media_size', 'media_status'];
+    protected $fillable = [ 'superadmin_name', 'superadmin_password', 'superadmin_status' ];
 
 
     public static function beginTransaction()
@@ -28,6 +25,6 @@ class MediaLibrary extends Model
     {
         self::getConnectionResolver()->connection()->rollBack();
     }
-}
 
+}
 ?>

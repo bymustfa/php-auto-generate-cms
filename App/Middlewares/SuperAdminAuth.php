@@ -2,7 +2,7 @@
 
 namespace App\Middlewares;
 
-use App\Models\SuperAdmin;
+use App\Models\SuperAdminModel;
 
 class SuperAdminAuth
 {

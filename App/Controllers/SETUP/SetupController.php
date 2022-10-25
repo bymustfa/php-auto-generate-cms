@@ -2,7 +2,7 @@
 
 namespace App\Controllers\SETUP;
 
-use App\Models\SuperAdmin;
+use App\Models\SuperAdminModel;
 use Core\Controller;
 use Symfony\Component\HttpFoundation\Request;
 

@@ -11,6 +11,7 @@ class [class_name] extends Schema
         $this->name = '[name]';
         $this->apiName = '[api_name]';
         $this->displayName = '[display_name]';
+        $this->modelName = '[model_name]';
         $this->slug = '[slug]';
         $this->tableName = '[table_name]';
 
@@ -59,6 +60,16 @@ class [class_name] extends Schema
             $sql = $this->createTable();
             sql($sql);
             return true;
+        } catch (\Exception $e) {
+            return false;
+        }
+    }
+
+
+    public function modelFileCreate()
+    {
+        try {
+            return $this->createModel();
         } catch (\Exception $e) {
             return false;
         }

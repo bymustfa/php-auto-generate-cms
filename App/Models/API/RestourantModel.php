@@ -2,13 +2,13 @@
 namespace App\Models\API;
 use Core\Model;
 
-class Restaurants extends Model
+class RestourantModel extends Model
 {
     public $timestamps = false;
-    protected $table = "cms_restaurants";
+    protected $table = "cms_restourants";
     protected $primaryKey = "id";
 
-    protected $fillable = [ 'name', 'stars', 'address', 'status' ];
+    protected $fillable = [ 'name', 'star', 'description' ];
 
 
     public static function beginTransaction()
