@@ -42,6 +42,7 @@ class ContentManagementController extends Controller
                 'name' => $name,
                 'apiName' => $apiName,
                 'displayName' => $displayName,
+                'modelName' => $displayName . "Model",
                 'slug' => $slug,
                 'tableName' => $tableName,
                 'fields' => $entityBody['fields'],

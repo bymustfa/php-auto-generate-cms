@@ -30,7 +30,7 @@ class SchemaCreator
             $schema->displayName = $schemaDatas['displayName'];
             $schema->slug = $schemaDatas['slug'];
             $schema->tableName = $schemaDatas['tableName'];
-            $schema->modelName = $schemaDatas['displayName'] . "Model";
+            $schema->modelName = $schemaDatas['modelName'];
 
             $schema->fields = [];
             $schema->relations = [];
@@ -64,11 +64,11 @@ class SchemaCreator
                 'status' => true,
                 'message' => "Schema file created successfully",
                 'data' => [
-                    'schema_file_name' => $fileName,
-                    'schema_name' => $schema->displayName . "Schema",
                     'name' => $schema->name,
-                    'display_name' => $schema->displayName,
                     'api_name' => $schema->apiName,
+                    'schema_name' => $schema->displayName . "Schema",
+                    'model_name' => $schema->modelName,
+                    'display_name' => $schema->displayName,
                     'slug' => $schema->slug,
                     'table_name' => $schema->tableName,
                     'fields' => $schema->fields,
