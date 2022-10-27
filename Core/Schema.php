@@ -8,6 +8,9 @@ class Schema
     public $apiName;
     public $displayName;
     public $modelName;
+    public $middlewareName;
+    public $controllerName;
+    public $schemaName;
     public $slug;
     public $tableName;
     public $fields;
@@ -70,8 +73,6 @@ class Schema
     {
         try {
 
-
-
             $templateFile = __DIR__ . "/../utilities/templates/model.template.txt";
             $template = file_get_contents($templateFile);
 
@@ -93,9 +94,7 @@ class Schema
             $fields = implode("', '", $fields);
 
 
-
             $template = str_replace("[fields]", "'$fields'", $template);
-
 
 
             // TODO: Relations add
@@ -110,6 +109,80 @@ class Schema
 
             return true;
 
+        } catch (\Exception $e) {
+            return false;
+        }
+    }
+
+    public function createMiddleware()
+    {
+        try {
+
+            $templateFile = __DIR__ . "/../utilities/templates/middleware.template.txt";
+            $template = file_get_contents($templateFile);
+
+            $template = str_replace("[class_name]", $this->middlewareName, $template);
+
+
+            $filePath = __DIR__ . "/../App/Middlewares/API/";
+            $fileName = $this->middlewareName . ".php";
+
+            $file = fopen($filePath . $fileName, "w");
+            fwrite($file, $template);
+            fclose($file);
+
+            return true;
+
+        } catch (\Exception $e) {
+            return false;
+        }
+    }
+
+    public function createController()
+    {
+        try {
+            $templateFile = __DIR__ . "/../utilities/templates/controller.template.txt";
+            $template = file_get_contents($templateFile);
+
+            $template = str_replace("[class_name]", $this->controllerName, $template);
+            $template = str_replace("[model_name]", $this->modelName, $template);
+            $template = str_replace("[schema_name]", $this->schemaName, $template);
+
+            $filePath = __DIR__ . "/../App/Controllers/API/";
+            $fileName = $this->controllerName . ".php";
+
+            $file = fopen($filePath . $fileName, "w");
+            fwrite($file, $template);
+            fclose($file);
+
+            return true;
+
+
+        } catch (\Exception $e) {
+            return false;
+        }
+    }
+
+
+    public function createRouteFile()
+    {
+        try {
+
+            $templateFile = __DIR__ . "/../utilities/templates/route.template.txt";
+            $template = file_get_contents($templateFile);
+
+            $template = str_replace("[controller_name]", $this->controllerName, $template);
+            $template = str_replace("[middleware_name]", $this->middlewareName, $template);
+            $template = str_replace("[api_name]", $this->apiName, $template);
+
+            $filePath = __DIR__ . "/../App/Routes/API/";
+            $fileName = $this->displayName . ".route.php";
+
+            $file = fopen($filePath . $fileName, "w");
+            fwrite($file, $template);
+            fclose($file);
+
+            return true;
         } catch (\Exception $e) {
             return false;
         }

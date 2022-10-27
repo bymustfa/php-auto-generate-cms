@@ -3,6 +3,7 @@
 namespace App\Controllers;
 
 use App\Models\SuperAdminModel;
+use Core\Schema;
 use Symfony\Component\HttpFoundation\Request;
 use Core\Controller;
 
@@ -69,6 +70,19 @@ class BackendController extends Controller
                 '=', '!=', '>', '<', '>=', '<='
             ]
         ]);
+    }
+
+    public function GetContentTypes()
+    {
+        $schema = new Schema();
+        $fieldTypes = $schema->fieldTypes;
+
+        response([
+            'status' => true,
+            'message' => 'Content Types Get Success',
+            'data' => $fieldTypes
+        ]);
+
     }
 
 

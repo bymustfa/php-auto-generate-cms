@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Schemas\API;
 
 use Core\Schema;
@@ -12,6 +11,9 @@ class RestourantSchema extends Schema
         $this->apiName = 'restourants';
         $this->displayName = 'Restourant';
         $this->modelName = 'RestourantModel';
+        $this->middlewareName = 'RestourantMiddleware';
+        $this->controllerName = 'RestourantController';
+        $this->schemaName = 'RestourantSchema';
         $this->slug = 'restourants';
         $this->tableName = 'cms_restourants';
 
@@ -19,13 +21,7 @@ class RestourantSchema extends Schema
 
         $this->fields = [];
 
-        $this->fields['id'] = [
-            'name' => 'id',
-            'type' => 'int',
-            'length' => 11,
-            'nullable' => false,
-            'autoIncrement' => true,
-        ];
+        $this->fields['id'] = ['name' => 'id', 'type' => 'int', 'length' => 11, 'nullable' => false, 'autoIncrement' => true, ];
 
         
 		$this->fields['name'] = [
@@ -74,49 +70,72 @@ class RestourantSchema extends Schema
 		];
 
 
-        $this->fields['created_at'] = [
-            'name' => 'created_at',
-            'type' => 'datetime',
-            'length' => null,
-            'primary' => false,
-            'autoIncrement' => false,
-            'unique' => false,
-            'default' => "CURRENT_TIMESTAMP",
-            'index' => false,
-        ];
+        $this->fields['created_at'] = ['name' => 'created_at', 'type' => 'datetime', 'length' => null, 'primary' => false, 'autoIncrement' => false, 'unique' => false, 'default' => "CURRENT_TIMESTAMP", 'index' => false, ];
 
-        $this->fields['updated_at'] = [
-            'name' => 'updated_at',
-            'type' => 'datetime',
-            'length' => null,
-            'primary' => false,
-            'autoIncrement' => false,
-            'unique' => false,
-            'default' => "CURRENT_TIMESTAMP",
-            'on_update' => "CURRENT_TIMESTAMP",
-            'index' => false,
-        ];
+        $this->fields['updated_at'] = ['name' => 'updated_at', 'type' => 'datetime', 'length' => null, 'primary' => false, 'autoIncrement' => false, 'unique' => false, 'default' => "CURRENT_TIMESTAMP", 'on_update' => "CURRENT_TIMESTAMP", 'index' => false, ];
 
     }
 
     public function migrateDatabase()
     {
-        try {
+        try
+        {
             $sql = $this->createTable();
             sql($sql);
             return true;
-        } catch (\Exception $e) {
+        }
+        catch(\Exception $e)
+        {
             return false;
         }
     }
 
-
     public function modelFileCreate()
     {
-        try {
+        try
+        {
             return $this->createModel();
-        } catch (\Exception $e) {
+        }
+        catch(\Exception $e)
+        {
+            return false;
+        }
+    }
+
+    public function middlewareFileCreate()
+    {
+        try
+        {
+            return $this->createMiddleware();
+        }
+        catch(\Exception $e)
+        {
+            return false;
+        }
+    }
+
+    public function controllerFileCreate()
+    {
+        try
+        {
+            return $this->createController();
+        }
+        catch(\Exception $e)
+        {
+            return false;
+        }
+    }
+
+    public function routeFileCreate()
+    {
+        try
+        {
+            return $this->createRouteFile();
+        }
+        catch(\Exception $e)
+        {
             return false;
         }
     }
 }
+

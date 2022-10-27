@@ -1,0 +1,15 @@
+<?php
+namespace App\Controllers\API;
+
+use Core\Controller;
+
+use App\Models\API\[model_name];
+use App\Schemas\API\[schema_name];
+
+class [class_name] extends Controller
+{
+    public $apiModel = [model_name]::class;
+    public $schemaClass = [schema_name]::class;
+}
+
+?>

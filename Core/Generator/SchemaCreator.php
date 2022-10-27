@@ -31,6 +31,10 @@ class SchemaCreator
             $schema->slug = $schemaDatas['slug'];
             $schema->tableName = $schemaDatas['tableName'];
             $schema->modelName = $schemaDatas['modelName'];
+            $schema->middlewareName = $schemaDatas['middlewareName'];
+            $schema->controllerName = $schemaDatas['controller_name'];
+            $schema->schemaName = $schemaDatas['schema_name'];
+
 
             $schema->fields = [];
             $schema->relations = [];
@@ -66,8 +70,10 @@ class SchemaCreator
                 'data' => [
                     'name' => $schema->name,
                     'api_name' => $schema->apiName,
-                    'schema_name' => $schema->displayName . "Schema",
+                    'schema_name' => $schema->schemaName,
                     'model_name' => $schema->modelName,
+                    'middleware_name' => $schema->middlewareName,
+                    'controller_name' => $schema->controllerName,
                     'display_name' => $schema->displayName,
                     'slug' => $schema->slug,
                     'table_name' => $schema->tableName,
@@ -132,9 +138,12 @@ class SchemaCreator
             $template = str_replace("[api_name]", $schema->apiName, $template);
             $template = str_replace("[display_name]", $schema->displayName, $template);
             $template = str_replace("[model_name]", $schema->modelName, $template);
+            $template = str_replace("[middleware_name]", $schema->middlewareName, $template);
+            $template = str_replace("[controller_name]", $schema->controllerName, $template);
             $template = str_replace("[slug]", $schema->slug, $template);
             $template = str_replace("[table_name]", $schema->tableName, $template);
-            $template = str_replace("[class_name]", $schema->displayName . "Schema", $template);
+            $template = str_replace("[class_name]", $schema->schemaName, $template);
+            $template = str_replace("[schema_name]", $schema->schemaName, $template);
 
 //            foreach ($fields as $key => $value) {
 //                $template = str_replace("[fields]", $value, $template);

@@ -3,27 +3,57 @@ namespace App\Schemas\API;
 
 use Core\Schema;
 
-class [class_name] extends Schema
+class UsersSchema extends Schema
 {
     public function __construct()
     {
-        $this->name = '[name]';
-        $this->apiName = '[api_name]';
-        $this->displayName = '[display_name]';
-        $this->modelName = '[model_name]';
-        $this->middlewareName = '[middleware_name]';
-        $this->controllerName = '[controller_name]';
-        $this->schemaName = '[schema_name]';
-        $this->slug = '[slug]';
-        $this->tableName = '[table_name]';
+        $this->name = 'Users';
+        $this->apiName = 'users';
+        $this->displayName = 'Users';
+        $this->modelName = 'UsersModel';
+        $this->middlewareName = 'UsersMiddleware';
+        $this->controllerName = 'UsersController';
+        $this->schemaName = 'UsersSchema';
+        $this->slug = 'users';
+        $this->tableName = 'cms_users';
 
-        $this->relations = [[relations]];
+        $this->relations = [];
 
         $this->fields = [];
 
         $this->fields['id'] = ['name' => 'id', 'type' => 'int', 'length' => 11, 'nullable' => false, 'autoIncrement' => true, ];
 
-        [other_fields]
+        
+		$this->fields['name_surname'] = [
+			'name' => 'name_surname',
+			'type' => 'varchar',
+			'length' => 255,
+			'primary' => false,
+			'autoIncrement' => false,
+			'nullable' => false,
+			'unique' => false,
+			'default' => null,
+			'index' => false,
+			'editable' => true,
+			'form_type' => 'text',
+			'form_label' => 'Kullanıcı Adı',
+		];
+
+		$this->fields['Email'] = [
+			'name' => 'Email',
+			'type' => 'varchar',
+			'length' => 255,
+			'primary' => false,
+			'autoIncrement' => false,
+			'nullable' => false,
+			'unique' => false,
+			'default' => null,
+			'index' => false,
+			'editable' => true,
+			'form_type' => 'email',
+			'form_label' => 'Kuallıcı Mail',
+		];
+
 
         $this->fields['created_at'] = ['name' => 'created_at', 'type' => 'datetime', 'length' => null, 'primary' => false, 'autoIncrement' => false, 'unique' => false, 'default' => "CURRENT_TIMESTAMP", 'index' => false, ];
 

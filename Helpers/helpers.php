@@ -42,13 +42,16 @@ function post($data = null)
  */
 function get($data)
 {
+    if (!isset($_GET[$data])) {
+        return null;
+    }
     if (is_array($_GET[$data])) {
         foreach ($_GET[$data] as $key => $value) {
-            $_GET[$data][$key] = $value ? htmlspecialchars(trim(strip_tags($value))) : "";
+            $_GET[$data][$key] = $value ? htmlspecialchars(trim(strip_tags($value))) : null;
         }
-        return $_GET;
+        return $_GET[$data];
     } else {
-        return $_GET ? htmlspecialchars(trim(strip_tags($_GET[$data]))) : "";
+        return $_GET[$data] ? htmlspecialchars(trim(strip_tags($_GET[$data]))) : null;
     }
 }
 
@@ -57,7 +60,6 @@ function get($data)
  * @param $data
  * @return array|string
  */
-
 function dataClear($data)
 {
     if (isset($data) && is_array($data)) {
@@ -409,7 +411,11 @@ function toEnglish($word)
     return $inflect->converLetterTRToEN($word);
 }
 
-function hastNumber($word)
+/**
+ * @param $word
+ * @return false|int
+ */
+function hasNumber($word)
 {
     return preg_match('/[0-9]/', $word);
 }

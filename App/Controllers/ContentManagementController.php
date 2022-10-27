@@ -26,7 +26,7 @@ class ContentManagementController extends Controller
                 throw new \Exception("Name is required");
             }
 
-            if (hastNumber($entityBody['name'])) {
+            if (hasNumber($entityBody['name'])) {
                 throw new \Exception("Title must not contain numbers");
             }
 
@@ -37,12 +37,16 @@ class ContentManagementController extends Controller
             $tableName = config("DB_PREFIX") . $slug;
 
 
+
             $schemaCreator = new SchemaCreator();
             $save = $schemaCreator->createSchema([
                 'name' => $name,
                 'apiName' => $apiName,
                 'displayName' => $displayName,
                 'modelName' => $displayName . "Model",
+                'middlewareName' => $displayName . "Middleware",
+                'controller_name' => $displayName . "Controller",
+                'schema_name' => $displayName . "Schema",
                 'slug' => $slug,
                 'tableName' => $tableName,
                 'fields' => $entityBody['fields'],
@@ -56,6 +60,9 @@ class ContentManagementController extends Controller
                 $schema = new $class();
                 $createTable = $schema->migrateDatabase();
                 $createModel = $schema->modelFileCreate();
+                $createMiddleware = $schema->middlewareFileCreate();
+                $createController = $schema->controllerFileCreate();
+                $createRoute = $schema->routeFileCreate();
 
                 if ($createTable) {
                     response([
