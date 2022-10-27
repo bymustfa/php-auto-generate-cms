@@ -1,18 +1,14 @@
 <?php
-
-namespace App\Models;
-
+namespace App\Models\API;
 use Core\Model;
 
-
-class MediaLibraryModel extends Model
+class UsersModel extends Model
 {
-
     public $timestamps = false;
-    protected $table = "media_library";
+    protected $table = "cms_users";
     protected $primaryKey = "id";
 
-    protected $fillable = ['media_guid', 'media_name', 'media_type', 'media_ext', 'media_paths', 'media_size', 'media_status'];
+    protected $fillable = [ 'name_surname', 'e_mail' ];
 
 
     public static function beginTransaction()
@@ -29,6 +25,6 @@ class MediaLibraryModel extends Model
     {
         self::getConnectionResolver()->connection()->rollBack();
     }
-}
 
+}
 ?>

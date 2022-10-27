@@ -6,16 +6,24 @@ namespace App\Controllers;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-
 use Core\Generator\SchemaCreator;
-
-use App\Schemas\API;
-
 use Core\Controller;
 
 
 class ContentManagementController extends Controller
 {
+
+    /**
+     * @OA\Post(
+     *   path="/app/content-manegement/create",
+     *   summary="create new content",
+     *   tags={"Content Management"},
+     *   @OA\Response(
+     *     response=200,
+     *     description="Create"
+     *   )
+     * )
+     */
     public function Create(Request $request)
     {
         try {
@@ -35,7 +43,6 @@ class ContentManagementController extends Controller
             $displayName = toCamelCase(toEnglish(strtolower($name)));
             $slug = slug($apiName, "_");
             $tableName = config("DB_PREFIX") . $slug;
-
 
 
             $schemaCreator = new SchemaCreator();
@@ -64,15 +71,31 @@ class ContentManagementController extends Controller
                 $createController = $schema->controllerFileCreate();
                 $createRoute = $schema->routeFileCreate();
 
-                if ($createTable) {
-                    response([
-                        'status' => true,
-                        'message' => 'Schema Created Successfully',
-                        'data' => $data
-                    ]);
-                } else {
-                    throw new \Exception("Schema Created Successfully, But Table Creation Failed");
+                if (!$createTable) {
+                    $data['error']['createTable'] = "Table could not be created";
                 }
+
+                if (!$createModel) {
+                    $data['error']['createModel'] = "Model could not be created";
+                }
+
+                if (!$createMiddleware) {
+                    $data['error']['createMiddleware'] = "Middleware could not be created";
+                }
+
+                if (!$createController) {
+                    $data['error']['createController'] = "Controller could not be created";
+                }
+
+                if (!$createRoute) {
+                    $data['error']['createRoute'] = "Route could not be created";
+                }
+
+                response([
+                    'status' => true,
+                    'message' => 'Schema Created Successfully',
+                    'data' => $data
+                ]);
 
             } else {
                 throw new \Exception("Schema Creation Failed");

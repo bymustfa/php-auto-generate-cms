@@ -15,8 +15,18 @@ use App\Models\MediaLibraryModel;
 
 class MediaLibraryController extends Controller
 {
-
-    public function GetAll()
+    /**
+     * @OA\Get(
+     *   path="/app/media-library/getAll",
+     *   summary="list media",
+     *   tags={"Media Library"},
+     *   @OA\Response(
+     *     response=200,
+     *     description="A list with medias"
+     *   )
+     * )
+     */
+    public function GetAllMedia()
     {
         try {
             $datas = MediaLibraryModel::all();
@@ -36,7 +46,7 @@ class MediaLibraryController extends Controller
         }
     }
 
-    public function GetOne($id)
+    public function GetOneMedia($id)
     {
         try {
             $media = MediaLibraryModel::find($id);

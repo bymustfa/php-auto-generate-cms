@@ -3,14 +3,17 @@
 namespace Core;
 
 use Symfony\Component\HttpFoundation\Request;
+use OpenApi\Attributes as OA;
 
-
+/**
+ * @OA\Info(title="Auto Generate CMS", version="0.1", description="Auto Generate CMS")
+ * @OA\Server(url=BASE_URL)
+ */
 class Controller extends Bootstrap
 {
     public $apiModel;
     public $schemaClass;
 
-    // TODO: Fix order and per page parameters
 
     // GET: getAll | ?page=1&perPage=5&orderBy=id&order=asc
     public function GetAll(Request $request)
@@ -31,7 +34,12 @@ class Controller extends Bootstrap
             }
 
             if ($page && $perPage) {
-                $data = $model->paginate($perPage, ['*'], 'page', $page);
+                $data = json_decode($model->paginate($perPage, ['*'], 'page', $page)->toJson(), true);
+                $data['count'] = $data['total'];
+                $data['datas'] = $data['data'];
+                unset($data['total']);
+                unset($data['data']);
+
             }
 
             response([
@@ -77,6 +85,22 @@ class Controller extends Bootstrap
         try {
             $model->beginTransaction();
             $entityBody = dataClear(json_decode($request->getContent(), true));
+
+            $schema = new $this->schemaClass();
+            $fields = $schema->fields;
+            $fieldTypes = $schema->fieldTypes;
+
+
+            foreach ($entityBody as $key => $value) {
+                $form_type = $fields[$key]['form_type'];
+                $form_pattern = $fieldTypes[$form_type]['form_pattern'] ?? null;
+                if ($form_pattern) {
+                    if (!preg_match($form_pattern, $value)) {
+                        throw new \Exception("Invalid $key");
+                    }
+                }
+            }
+
             $data = $model->create($entityBody);
             $model->commit();
             response([
@@ -199,7 +223,11 @@ class Controller extends Bootstrap
             }
 
             if ($page && $perPage) {
-                $data = $model->paginate($perPage, ['*'], 'page', $page);
+                $data = json_decode($model->paginate($perPage, ['*'], 'page', $page)->toJson(), true);
+                $data['count'] = $data['total'];
+                $data['datas'] = $data['data'];
+                unset($data['total']);
+                unset($data['data']);
             }
 
             response([

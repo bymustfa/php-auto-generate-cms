@@ -61,6 +61,17 @@ class BackendController extends Controller
         redirect(base_url('login'));
     }
 
+    /**
+     * @OA\Get(
+     *   path="/app/get-filter-types",
+     *   summary="Get filter types",
+     *   tags={"Types"},
+     *   @OA\Response(
+     *     response=200,
+     *     description="Filter Types Get Success"
+     *   )
+     * )
+     */
     public function GetFilterTypes()
     {
         response([
@@ -72,6 +83,17 @@ class BackendController extends Controller
         ]);
     }
 
+    /**
+     * @OA\Get(
+     *   path="/app/get-content-types",
+     *   summary="Get content types",
+     *   tags={"Types"},
+     *   @OA\Response(
+     *     response=200,
+     *     description="Content Types Get Success"
+     *   )
+     * )
+     */
     public function GetContentTypes()
     {
         $schema = new Schema();

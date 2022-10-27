@@ -41,8 +41,9 @@ class SchemaCreator
 
             if (isset($schemaDatas['fields'])) {
                 foreach ($schemaDatas['fields'] as $field) {
+                    $columnName = slug($field['name'], "_");
                     $schema->fields[$field['name']] = [
-                        'name' => $field['name'],
+                        'name' => $columnName,
                         'type' => $fieldTypes[$field['type']]['type'],
                         'length' => $fieldTypes[$field['type']]['length'],
                         'primary' => false,

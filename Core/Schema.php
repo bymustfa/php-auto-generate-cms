@@ -19,11 +19,11 @@ class Schema
     public $fieldTypes = [
         'text' => ['type' => 'varchar', 'length' => 255, 'form_type' => 'text', 'form_label' => 'Text'],
         'textarea' => ['type' => 'text', 'length' => 65.535, 'form_type' => 'textarea', 'form_label' => 'Textarea'],
-        'int' => ['type' => 'int', 'length' => 11, 'form_pattern' => '/^[0-9]*/gm', 'form_type' => 'number', 'form_label' => 'Number Int'],
-        'float' => ['type' => 'float', 'length' => 11, 'form_pattern' => '/[\-\+]?[0-9]*(\.[0-9]+)?/gm', 'form_type' => 'number', 'form_label' => 'Number Float'],
-        'decimal' => ['type' => 'decimal', 'length' => 11, 'form_pattern' => '/(?<![\d.])(\d{1,2}|\d{0,2}\.\d{1,2})?(?![\d.])/gm', 'form_type' => 'number', 'form_label' => 'Number Decimal'],
+        'int' => ['type' => 'int', 'length' => 11, 'form_pattern' => '/^[0-9]*/', 'form_type' => 'number', 'form_label' => 'Number Int'],
+        'float' => ['type' => 'float', 'length' => 11, 'form_pattern' => '/[\-\+]?[0-9]*(\.[0-9]+)?/', 'form_type' => 'number', 'form_label' => 'Number Float'],
+        'decimal' => ['type' => 'decimal', 'length' => 11, 'form_pattern' => '/(?<![\d.])(\d{1,2}|\d{0,2}\.\d{1,2})?(?![\d.])/', 'form_type' => 'number', 'form_label' => 'Number Decimal'],
         'password' => ['type' => 'varchar', 'length' => 255, 'form_type' => 'password', 'form_label' => 'Password'],
-        'email' => ['type' => 'varchar', 'length' => 255, 'form_pattern' => '/^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/gm', 'form_type' => 'email', 'form_label' => 'Email'],
+        'email' => ['type' => 'varchar', 'length' => 255, 'form_pattern' => '/^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+/', 'form_type' => 'email', 'form_label' => 'Email'],
         'date' => ['type' => 'datetime', 'length' => null, 'form_type' => 'date', 'form_label' => 'Date'],
         'boolean' => ['type' => 'tinyint', 'length' => 1, 'form_type' => 'checkbox', 'form_label' => 'Boolean'],
     ];

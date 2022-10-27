@@ -39,8 +39,8 @@ class UsersSchema extends Schema
 			'form_label' => 'Kullanıcı Adı',
 		];
 
-		$this->fields['Email'] = [
-			'name' => 'Email',
+		$this->fields['e_mail'] = [
+			'name' => 'e_mail',
 			'type' => 'varchar',
 			'length' => 255,
 			'primary' => false,
