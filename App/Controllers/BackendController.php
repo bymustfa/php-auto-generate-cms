@@ -108,6 +108,29 @@ class BackendController extends Controller
     }
 
 
+    /**
+     * @OA\Get(
+     *   path="/app/get-relation-types",
+     *   summary="Get content types",
+     *   tags={"Types"},
+     *   @OA\Response(
+     *     response=200,
+     *     description="Content Types Get Success"
+     *   )
+     * )
+     */
+    public function GetRelationTypes()
+    {
+
+        response([
+            'status' => true,
+            'message' => 'Retation Types Get Success',
+            'data' => ["oneToOne", "oneToMany", "manyToOne", "manyToMany"]
+        ]);
+
+    }
+
+
 }
 
 

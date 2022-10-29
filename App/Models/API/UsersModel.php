@@ -11,6 +11,7 @@ class UsersModel extends Model
     protected $fillable = [ 'name_surname', 'e_mail' ];
 
 
+
     public static function beginTransaction()
     {
         self::getConnectionResolver()->connection()->beginTransaction();

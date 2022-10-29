@@ -2,6 +2,7 @@
 
 namespace Core;
 
+use Illuminate\Database\QueryException;
 use Symfony\Component\HttpFoundation\Request;
 use OpenApi\Attributes as OA;
 
@@ -15,7 +16,6 @@ class Controller extends Bootstrap
     public $schemaClass;
 
 
-    // GET: getAll | ?page=1&perPage=5&orderBy=id&order=asc
     public function GetAll(Request $request)
     {
         try {
@@ -25,6 +25,11 @@ class Controller extends Bootstrap
 
             $model = new $this->apiModel();
             $data = $model->get();
+
+            // if model hasMany
+            if (method_exists($model, 'experiences')) {
+                $data = $model->with('experiences')->get();
+            }
 
             $orderBy = get('orderBy');
             $order = get('order');
@@ -52,14 +57,15 @@ class Controller extends Bootstrap
                     ]
             ]);
         } catch (\Exception $e) {
+            $message = errorMessageConvert($e->getMessage());
             response([
                 'status' => false,
-                'message' => $e->getMessage()
+                'message' => $message
             ], 500);
         }
     }
 
-    // GET: getAll/:id
+
     public function GetOne(Request $request, $id)
     {
         try {
@@ -71,14 +77,15 @@ class Controller extends Bootstrap
                 'data' => $data
             ]);
         } catch (\Exception $e) {
+            $message = errorMessageConvert($e->getMessage());
             response([
                 'status' => false,
-                'message' => $e->getMessage()
+                'message' => $message
             ], 500);
         }
     }
 
-    // POST: create
+
     public function Create(Request $request)
     {
         $model = new $this->apiModel();
@@ -86,18 +93,17 @@ class Controller extends Bootstrap
             $model->beginTransaction();
             $entityBody = dataClear(json_decode($request->getContent(), true));
 
+
             $schema = new $this->schemaClass();
             $fields = $schema->fields;
             $fieldTypes = $schema->fieldTypes;
 
-
             foreach ($entityBody as $key => $value) {
                 $form_type = $fields[$key]['form_type'];
                 $form_pattern = $fieldTypes[$form_type]['form_pattern'] ?? null;
-                if ($form_pattern) {
-                    if (!preg_match($form_pattern, $value)) {
-                        throw new \Exception("Invalid $key");
-                    }
+                if ($form_pattern && !preg_match($form_pattern, $value)) {
+                    $formLabel = $fields[$key]['form_label'] ?? $key;
+                    throw new \Exception("Invalid '$formLabel'");
                 }
             }
 
@@ -110,14 +116,15 @@ class Controller extends Bootstrap
             ]);
         } catch (\Exception $e) {
             $model->rollBack();
+            $message = errorMessageConvert($e->getMessage());
             response([
                 'status' => false,
-                'message' => $e->getMessage()
+                'message' => $message
             ], 500);
         }
     }
 
-    // POST: createMany
+
     public function CreateMany(Request $request)
     {
         $model = new $this->apiModel();
@@ -138,14 +145,15 @@ class Controller extends Bootstrap
             ]);
         } catch (\Exception $e) {
             $model->rollBack();
+            $message = errorMessageConvert($e->getMessage());
             response([
                 'status' => false,
-                'message' => $e->getMessage()
+                'message' => $message
             ], 500);
         }
     }
 
-    // PUT: update/:id
+
     public function Update(Request $request, $id)
     {
         $model = new $this->apiModel();
@@ -165,14 +173,15 @@ class Controller extends Bootstrap
             ]);
         } catch (\Exception $e) {
             $model->rollBack();
+            $message = errorMessageConvert($e->getMessage());
             response([
                 'status' => false,
-                'message' => $e->getMessage()
+                'message' => $message
             ], 500);
         }
     }
 
-    // DELETE: delete/:id
+
     public function Delete(Request $request, $id)
     {
         $model = new $this->apiModel();
@@ -191,14 +200,15 @@ class Controller extends Bootstrap
             ]);
         } catch (\Exception $e) {
             $model->rollBack();
+            $message = errorMessageConvert($e->getMessage());
             response([
                 'status' => false,
-                'message' => $e->getMessage()
+                'message' => $message
             ], 500);
         }
     }
 
-    // POST: filter | ?page=1&perPage=5
+
     public function Filter(Request $request)
     {
         try {
@@ -240,9 +250,10 @@ class Controller extends Bootstrap
                     ]
             ]);
         } catch (\Exception $e) {
+            $message = errorMessageConvert($e->getMessage());
             response([
                 'status' => false,
-                'message' => $e->getMessage()
+                'message' => $message
             ], 500);
         }
     }

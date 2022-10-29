@@ -36,7 +36,7 @@ class UsersSchema extends Schema
 			'index' => false,
 			'editable' => true,
 			'form_type' => 'text',
-			'form_label' => 'Kullanıcı Adı',
+			'form_label' => 'Ad Soyad',
 		];
 
 		$this->fields['e_mail'] = [
@@ -46,12 +46,12 @@ class UsersSchema extends Schema
 			'primary' => false,
 			'autoIncrement' => false,
 			'nullable' => false,
-			'unique' => false,
+			'unique' => true,
 			'default' => null,
 			'index' => false,
 			'editable' => true,
 			'form_type' => 'email',
-			'form_label' => 'Kuallıcı Mail',
+			'form_label' => 'E-posta',
 		];
 
 

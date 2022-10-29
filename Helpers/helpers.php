@@ -386,6 +386,25 @@ function controllerResponse($headers, $message = "", $data = null, $status = tru
 }
 
 
+function errorMessageConvert($errorMessage)
+{
+    if (strpos($errorMessage, "SQLSTATE[23000]") !== false) {
+        $columnName = explode("for key '", $errorMessage);
+        $columnName = explode("'", $columnName[1]);
+        $columnName = $columnName[0];
+        $columnName = explode(".", $columnName);
+        $columnName = $columnName[1] ?? $columnName[0];
+
+        $value = explode("Duplicate entry '", $errorMessage);
+        $value = explode("'", $value[1]);
+        $value = $value[0];
+
+        return "Duplicate entry value: $value, column: $columnName";
+    }
+    return $errorMessage;
+}
+
+
 function toPlural($word)
 {
     $inflect = new \Core\Inflect();

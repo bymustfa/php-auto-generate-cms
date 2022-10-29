@@ -1,9 +1,8 @@
-
 <!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="UTF-8">
-    <title>Swagger UI</title>
+    <title>Auto Generate CMS Documentation</title>
     <link rel="stylesheet" type="text/css" href="<?=base_url('App/Routes/Doc/swagger-ui.css')?>" />
     <link rel="stylesheet" type="text/css" href="<?=base_url('App/Routes/Doc/index.css')?>" />
     <link rel="icon" type="image/png" href="<?=base_url('App/Routes/Doc/favicon-32x32.png')?>" sizes="32x32" />

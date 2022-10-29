@@ -10,8 +10,6 @@ class UsersController extends Controller
 {
     public $apiModel = UsersModel::class;
     public $schemaClass = UsersSchema::class;
-
-
 }
 
 ?>

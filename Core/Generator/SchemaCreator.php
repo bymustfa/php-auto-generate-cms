@@ -39,6 +39,19 @@ class SchemaCreator
             $schema->fields = [];
             $schema->relations = [];
 
+
+            if (isset($schemaDatas['relations']) && count($schemaDatas['relations']) > 0) {
+                foreach ($schemaDatas['relations'] as $relation) {
+                    $schema->relations[] = [
+                        'name' => $relation['name'],
+                        'type' => $relation['type'],
+                        'model' => $relation['model'],
+                        'foreign_key' => $relation['foreign_key'],
+                        'local_key' => slug($relation['name'], "_") . "_id",
+                    ];
+                }
+            }
+
             if (isset($schemaDatas['fields'])) {
                 foreach ($schemaDatas['fields'] as $field) {
                     $columnName = slug($field['name'], "_");
@@ -56,6 +69,10 @@ class SchemaCreator
                         'form_type' => $fieldTypes[$field['type']]['form_type'],
                         'form_label' => $field['form_label'] ?? $fieldTypes[$field['type']]['form_label'],
                     ];
+
+                    if ($fieldTypes[$field['type']]['type'] == 'enum') {
+                        $schema->fields[$field['name']]['values'] = $field['values'];
+                    }
                 }
             }
 
@@ -79,7 +96,7 @@ class SchemaCreator
                     'slug' => $schema->slug,
                     'table_name' => $schema->tableName,
                     'fields' => $schema->fields,
-
+                    'relations' => $schema->relations,
                 ]
             ];
 
@@ -105,16 +122,42 @@ class SchemaCreator
                     foreach (array_keys($field) as $key => $value) {
                         $contentString .= "\t\t\t'" . $value . "' => " .
                             (
-                            is_string($field[$value]) ? "'" . $field[$value] . "'" :
-                                (is_bool($field[$value]) ? ($field[$value] ? "true" : "false") :
-                                    (is_null($field[$value]) ? "null" : $field[$value])
+                            is_array($field[$value]) ?
+                                "['" . implode("','", $field[$value]) . "']" :
+                                (
+                                is_string($field[$value]) ? "'" . $field[$value] . "'" :
+                                    (
+                                    is_bool($field[$value]) ? ($field[$value] ? "true" : "false") :
+                                        (
+                                        is_null($field[$value]) ? "null" : $field[$value]
+                                        )
+                                    )
                                 )
-                            )
 
+                            )
                             . ",\r\n";
                     }
                     $contentString .= "\t\t];\r\n";
                 }
+            }
+
+            return $contentString;
+        } catch (\Exception $e) {
+            return "";
+        }
+
+    }
+
+    private function createRelations($relations)
+    {
+        try {
+            $contentString = "\n";
+            foreach ($relations as $relation) {
+                $contentString .= "\t\t[\n";
+                foreach (array_keys($relation) as $key => $value) {
+                    $contentString .= "\t\t\t'" . $value . "' => '" . $relation[$value] . "',\r\n";
+                }
+                $contentString .= "\t\t],\n";
             }
 
             return $contentString;
@@ -129,11 +172,12 @@ class SchemaCreator
     {
         try {
 
+
             $templateFile = __DIR__ . "/../../utilities/templates/schema.template.txt";
             $template = file_get_contents($templateFile);
 
             $fields = $this->createFields($schema->fields);
-
+            $relations = $this->createRelations($schema->relations);
 
             $template = str_replace("[name]", $schema->name, $template);
             $template = str_replace("[api_name]", $schema->apiName, $template);
@@ -146,14 +190,9 @@ class SchemaCreator
             $template = str_replace("[class_name]", $schema->schemaName, $template);
             $template = str_replace("[schema_name]", $schema->schemaName, $template);
 
-//            foreach ($fields as $key => $value) {
-//                $template = str_replace("[fields]", $value, $template);
-//            }
-
 
             $template = str_replace("[other_fields]", $fields, $template);
-            // TODO: Fix relations
-            $template = str_replace("[relations]", "", $template);
+            $template = str_replace("[relations]", $relations, $template);
 
 
             $file = fopen($filePath, "w");
