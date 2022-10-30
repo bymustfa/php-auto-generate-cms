@@ -17,7 +17,8 @@ class UsersSchema extends Schema
         $this->slug = 'users';
         $this->tableName = 'cms_users';
 
-        $this->relations = [];
+        $this->relations = [
+];
 
         $this->fields = [];
 
@@ -46,12 +47,12 @@ class UsersSchema extends Schema
 			'primary' => false,
 			'autoIncrement' => false,
 			'nullable' => false,
-			'unique' => true,
+			'unique' => false,
 			'default' => null,
 			'index' => false,
 			'editable' => true,
 			'form_type' => 'email',
-			'form_label' => 'E-posta',
+			'form_label' => 'E-Posta',
 		];
 
 

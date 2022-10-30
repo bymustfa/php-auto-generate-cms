@@ -10,6 +10,10 @@ class UsersModel extends Model
 
     protected $fillable = [ 'name_surname', 'e_mail' ];
 
+     public $relations = [];
+
+    
+
 
 
     public static function beginTransaction()

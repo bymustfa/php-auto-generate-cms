@@ -213,6 +213,8 @@ class Schema
             $template = str_replace("[class_name]", $this->controllerName, $template);
             $template = str_replace("[model_name]", $this->modelName, $template);
             $template = str_replace("[schema_name]", $this->schemaName, $template);
+            $template = str_replace("[api_name]", $this->apiName, $template);
+            $template = str_replace("[display_name]", $this->displayName, $template);
 
             $filePath = __DIR__ . "/../App/Controllers/API/";
             $fileName = $this->controllerName . ".php";
