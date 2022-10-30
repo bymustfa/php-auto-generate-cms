@@ -5,6 +5,7 @@ namespace Core;
 use Illuminate\Database\QueryException;
 use Symfony\Component\HttpFoundation\Request;
 use OpenApi\Attributes as OA;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * @OA\Info(title="Auto Generate CMS", version="0.1", description="Auto Generate CMS")
@@ -22,13 +23,14 @@ class Controller extends Bootstrap
             $page = get('page');
             $perPage = get('perPage');
 
-
             $model = new $this->apiModel();
             $data = $model->get();
 
-            // if model hasMany
-            if (method_exists($model, 'experiences')) {
-                $data = $model->with('experiences')->get();
+            $relations = $model->relations;
+            if (count($relations) > 0) {
+                foreach ($relations as $relation) {
+                    $data = $data->load($relation['methodName']);
+                }
             }
 
             $orderBy = get('orderBy');
@@ -44,7 +46,6 @@ class Controller extends Bootstrap
                 $data['datas'] = $data['data'];
                 unset($data['total']);
                 unset($data['data']);
-
             }
 
             response([
@@ -61,7 +62,7 @@ class Controller extends Bootstrap
             response([
                 'status' => false,
                 'message' => $message
-            ], 500);
+            ], Response::HTTP_BAD_REQUEST);
         }
     }
 
@@ -81,7 +82,7 @@ class Controller extends Bootstrap
             response([
                 'status' => false,
                 'message' => $message
-            ], 500);
+            ], Response::HTTP_BAD_REQUEST);
         }
     }
 
@@ -92,7 +93,6 @@ class Controller extends Bootstrap
         try {
             $model->beginTransaction();
             $entityBody = dataClear(json_decode($request->getContent(), true));
-
 
             $schema = new $this->schemaClass();
             $fields = $schema->fields;
@@ -120,12 +120,12 @@ class Controller extends Bootstrap
             response([
                 'status' => false,
                 'message' => $message
-            ], 500);
+            ], Response::HTTP_BAD_REQUEST);
         }
     }
 
 
-    public function CreateMany(Request $request)
+    public function CreateMulti(Request $request)
     {
         $model = new $this->apiModel();
         try {
@@ -149,7 +149,7 @@ class Controller extends Bootstrap
             response([
                 'status' => false,
                 'message' => $message
-            ], 500);
+            ], Response::HTTP_BAD_REQUEST);
         }
     }
 
@@ -177,7 +177,7 @@ class Controller extends Bootstrap
             response([
                 'status' => false,
                 'message' => $message
-            ], 500);
+            ], Response::HTTP_BAD_REQUEST);
         }
     }
 
@@ -204,7 +204,7 @@ class Controller extends Bootstrap
             response([
                 'status' => false,
                 'message' => $message
-            ], 500);
+            ], Response::HTTP_BAD_REQUEST);
         }
     }
 
@@ -254,7 +254,7 @@ class Controller extends Bootstrap
             response([
                 'status' => false,
                 'message' => $message
-            ], 500);
+            ], Response::HTTP_BAD_REQUEST);
         }
     }
 

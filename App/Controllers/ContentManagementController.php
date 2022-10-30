@@ -28,7 +28,6 @@ class ContentManagementController extends Controller
     public function Create(Request $request)
     {
         try {
-
             $entityBody = dataClear(json_decode($request->getContent(), true));
 
             if (!isset($entityBody['fields']) && count($entityBody['fields']) == 0) {
@@ -44,7 +43,6 @@ class ContentManagementController extends Controller
             }
 
 
-
             $name = $entityBody['name'];
             $apiName = slug(toPlural(strtolower($name)), "-");
             $displayName = toCamelCase(toEnglish(strtolower($name)));
@@ -55,8 +53,8 @@ class ContentManagementController extends Controller
 
             $relations = [];
 
-            if(isset($entityBody['relations'])){
-                $relations =$entityBody['relations'];
+            if (isset($entityBody['relations'])) {
+                $relations = $entityBody['relations'];
             }
 
 

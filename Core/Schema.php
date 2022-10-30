@@ -33,51 +33,87 @@ class Schema
     ];
 
 
+
+    public $relationTypes = [
+        'one_to_one' => ['type' => 'one_to_one', 'label' => 'One to One', 'form_label' => 'One to One', 'methodName' => 'hasOne'],
+        'one_to_many' => ['type' => 'one_to_many', 'label' => 'One to Many', 'form_label' => 'One to Many', 'methodName' => 'hasMany'],
+        'many_to_many' => ['type' => 'many_to_many', 'label' => 'Many to Many', 'form_label' => 'Many to Many', 'methodName' => 'belongsToMany'],
+    ];
+
+    private function fieldSqlText($field)
+    {
+        $sql = "`{$field['name']}` {$field['type']}";
+
+        if ($field['type'] == 'enum') {
+            $sql .= "('" . implode("','", $field['values']) . "')";
+        }
+
+        if (isset($field['length']) && $field['length']) {
+            $sql .= "({$field['length']})";
+        }
+        if (isset($field['primary']) && $field['primary']) {
+            $sql .= " PRIMARY KEY";
+        }
+        if (isset($field['autoIncrement']) && $field['autoIncrement']) {
+            $sql .= " AUTO_INCREMENT";
+        }
+        if (isset($field['nullable'])) {
+            $sql .= $field['nullable'] || isset($field['default']) ? " NULL" : " NOT NULL";
+        }
+
+        if (isset($field['unique']) && $field['unique']) {
+            $sql .= " UNIQUE";
+        }
+        if (isset($field['default']) && $field['default']) {
+            $sql .= is_string($field['default']) && $field['default'] !== "CURRENT_TIMESTAMP" && $field['default'] !== "CURRENT_TIMESTAMP" ?
+                " DEFAULT '{$field['default']}'" :
+                " DEFAULT {$field['default']}";
+        }
+
+        if (isset($field['on_update']) && $field['on_update']) {
+            $sql .= " ON UPDATE {$field['on_update']}";
+        }
+        $sql .= ",";
+        return $sql;
+    }
+
+
     public function createTable()
     {
         $sql = "CREATE TABLE IF NOT EXISTS `{$this->tableName}` (";
+
         foreach ($this->fields as $field) {
-            $sql .= "`{$field['name']}` {$field['type']}";
-
-            if ($field['type'] == 'enum') {
-                $sql .= "('" . implode("','", $field['values']) . "')";
-            }
-
-            if (isset($field['length']) && $field['length']) {
-                $sql .= "({$field['length']})";
-            }
-            if (isset($field['primary']) && $field['primary']) {
-                $sql .= " PRIMARY KEY";
-            }
-            if (isset($field['autoIncrement']) && $field['autoIncrement']) {
-                $sql .= " AUTO_INCREMENT";
-            }
-            if (isset($field['nullable'])) {
-                $sql .= $field['nullable'] || isset($field['default']) ? " NULL" : " NOT NULL";
-            }
-
-            if (isset($field['unique']) && $field['unique']) {
-                $sql .= " UNIQUE";
-            }
-            if (isset($field['default']) && $field['default']) {
-                $sql .= is_string($field['default']) && $field['default'] !== "CURRENT_TIMESTAMP" && $field['default'] !== "CURRENT_TIMESTAMP" ?
-                    " DEFAULT '{$field['default']}'" :
-                    " DEFAULT {$field['default']}";
-            }
-
-            if (isset($field['on_update']) && $field['on_update']) {
-                $sql .= " ON UPDATE {$field['on_update']}";
-            }
-
-            if (isset($field['index']) && $field['index']) {
-                $sql .= " INDEX";
-            }
-            $sql .= ",";
+            $sql .= $this->fieldSqlText($field);
         }
+
+        foreach ($this->relations as $relation) {
+            $foreignTable = $relation['table_name'];
+            $foreignKey = "fk_" . $relation['name'] . "_id";
+            $sql .= $this->fieldSqlText([
+                'name' => $foreignKey,
+                'type' => 'int',
+                'length' => 11,
+                'nullable' => false,
+            ]);
+            $sql .= " FOREIGN KEY (`{$foreignKey}`) REFERENCES `{$foreignTable}`(`id`),";
+        }
+
         $sql = rtrim($sql, ',');
         $sql .= ", PRIMARY KEY(`id`)  ) CHARSET = utf8 AUTO_INCREMENT = 1;";
-
         return $sql;
+    }
+
+    private function createRelationMethod($relation)
+    {
+        $foreignKey = "fk_" . $relation['name'] . "_id";
+
+        $relationType = $this->relationTypes[$relation['type']];
+        $method = "\n";
+        $method .= "\tpublic function {$relation['name']}()\n";
+        $method .= "\t{\n";
+        $method .= "\t\t return \$this->{$relationType['methodName']}({$relation['model']}::class, 'id', '{$foreignKey}');\n";
+        $method .= "\t}\n";
+        return $method;
     }
 
 
@@ -106,14 +142,27 @@ class Schema
             $fields = implode("', '", $fields);
             $template = str_replace("[fields]", "'$fields'", $template);
 
-            // relations
-            $relations = [];
-            foreach ($this->relations as $relation) {
-                $relations[] = $relation['name'];
-            }
-            $relations = implode("', '", $relations);
-            $template = str_replace("[relations]", "'$relations'", $template);
+            if (count($this->relations) > 0) {
+                $relationMethods = "";
+                $relations = "";
+                foreach ($this->relations as $relation) {
+                    $relations .= "\n\t\t[\n";
+                    foreach (array_keys($relation) as $key) {
+                        $relations .= "\t\t\t'$key' => '{$relation[$key]}',\n";
+                    }
+                    $methodName = slug($relation['name'], "");
+                    $relations .= "\t\t\t'methodName' => '$methodName',\n";
+                    $relations .= "\t\t],\n";
 
+                    $relationMethods .= $this->createRelationMethod($relation);
+                }
+
+                $template = str_replace("[relations]", $relations, $template);
+                $template = str_replace("[relation_methods]", $relationMethods, $template);
+            } else {
+                $template = str_replace("[relations]", "", $template);
+                $template = str_replace("[relation_methods]", "", $template);
+            }
 
 
             $filePath = __DIR__ . "/../App/Models/API/";

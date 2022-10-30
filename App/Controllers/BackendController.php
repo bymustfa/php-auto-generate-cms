@@ -4,6 +4,7 @@ namespace App\Controllers;
 
 use App\Models\SuperAdminModel;
 use Core\Schema;
+use Core\Upload;
 use Symfony\Component\HttpFoundation\Request;
 use Core\Controller;
 
@@ -104,7 +105,6 @@ class BackendController extends Controller
             'message' => 'Content Types Get Success',
             'data' => $fieldTypes
         ]);
-
     }
 
 
@@ -128,6 +128,34 @@ class BackendController extends Controller
             'data' => ["oneToOne", "oneToMany", "manyToOne", "manyToMany"]
         ]);
 
+    }
+
+    /**
+     * @OA\Get(
+     *   path="/app/get-file-types",
+     *   summary="Get file types",
+     *   tags={"Types"},
+     *   @OA\Response(
+     *     response=200,
+     *     description="Content Types Get Success"
+     *   )
+     * )
+     */
+    public function GetFileTypes()
+    {
+        $fileTypes = Upload::$fileTypes;
+        $types = [];
+        foreach (array_keys($fileTypes) as $key) {
+            $types[] = [
+                'name' => $key,
+                'accept' => $fileTypes[$key]
+            ];
+        }
+        response([
+            'status' => true,
+            'message' => 'File Types Get Success',
+            'data' => $types
+        ]);
     }
 
 

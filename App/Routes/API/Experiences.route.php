@@ -1,8 +1,8 @@
 <?php
 
-$controllerName = "API.UsersController";
-$beforeMiddleware = "API\UsersMiddleware";
-$routerPrefix = "/users";
+$controllerName = "API.ExperiencesController";
+$beforeMiddleware = "API\ExperiencesMiddleware";
+$routerPrefix = "/experiences";
 
 $router->get(   $routerPrefix . "/getAll",      $controllerName . '@GetAll',     ['before' => $beforeMiddleware]);
 $router->get(   $routerPrefix . "/getOne/:id",  $controllerName . '@GetOne',     ['before' => $beforeMiddleware]);

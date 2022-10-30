@@ -10,7 +10,9 @@ class [class_name]Model extends Model
 
     protected $fillable = [ [fields] ];
 
-    [relations]
+     public $relations = [[relations]];
+
+    [relation_methods]
 
 
 

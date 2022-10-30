@@ -46,8 +46,8 @@ class SchemaCreator
                         'name' => $relation['name'],
                         'type' => $relation['type'],
                         'model' => $relation['model'],
-                        'foreign_key' => $relation['foreign_key'],
-                        'local_key' => slug($relation['name'], "_") . "_id",
+                        'table_name' => $relation['table_name'],
+                        'foreign_key' => "id"
                     ];
                 }
             }
@@ -133,7 +133,6 @@ class SchemaCreator
                                         )
                                     )
                                 )
-
                             )
                             . ",\r\n";
                     }
@@ -171,8 +170,6 @@ class SchemaCreator
     private function createSchemaFile($schema, $filePath)
     {
         try {
-
-
             $templateFile = __DIR__ . "/../../utilities/templates/schema.template.txt";
             $template = file_get_contents($templateFile);
 
